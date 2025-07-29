@@ -294,8 +294,8 @@ public class BTRobotV1 {
 
     public void Setup_Intake_Pose_RTP(boolean t) {
         if(t) {
-            IL.setPosition(0.35);
-            IR.setPosition(0.35);
+            IL.setPosition(0.4);
+            IR.setPosition(0.4);
         } else{
             IL.setPosition(0.0);
             IR.setPosition(0.0);
@@ -342,7 +342,7 @@ public class BTRobotV1 {
 
     public void HighBasketScore(){
         Setup_Deposit_Arm(0.6);
-        Setup_Deposit_Wrist(0.1);
+        Setup_Deposit_Wrist(0.18);
         Setup_Vertical_Lift(800, 1.0);
     }
 
@@ -353,14 +353,9 @@ public class BTRobotV1 {
         Setup_Vertical_Lift(80, 1.0);
     }
 
-    public void NoSlideScore(){
-        Setup_Deposit_Arm(0.6);
-        Setup_Deposit_Wrist(0.1);
-    }
-
     public void TransferSample(){
         Setup_Deposit_Claw(true);
-        Setup_Deposit_Arm(0.13);
+        Setup_Deposit_Arm(0.11);
         Setup_Deposit_Wrist(0.28);
         Setup_Vertical_Lift(0, 1.0);
     }

@@ -44,7 +44,7 @@ public class Samples extends OpMode {
     private final Pose startPose = new Pose(9, 111, Math.toRadians(270));
 
     /** Scoring Pose of our robot. It is facing the submersible at a -45 degree (315 degree) angle. */
-    private final Pose scorePose = new Pose(15, 125, Math.toRadians(315));
+    private final Pose scorePose = new Pose(12, 128, Math.toRadians(315));
 
     /** Lowest (First) Sample from the Spike Mark */
     private final Pose pickup1Pose = new Pose(18, 125, Math.toRadians(0));
@@ -191,19 +191,20 @@ public class Samples extends OpMode {
                 break;
             case 1:
                 if(!follower.isBusy()) {
-//                   try {
-                    // Pause the current thread for 1000 milliseconds (1 second)
-//                        Thread.sleep(5000);
-//                    } catch (InterruptedException e) {
-//                        // Handle the InterruptedException, which occurs if another thread interrupts this one
-//                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
-//                        // Re-interrupt the current thread to indicate that it was interrupted
-//                        Thread.currentThread().interrupt();
-//                    }
+                   try {
+//                     Pause the current thread for 1000 milliseconds (1 second)
+                        Thread.sleep(1500);
+                    } catch (InterruptedException e) {
+                        // Handle the InterruptedException, which occurs if another thread interrupts this one
+                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
+                        // Re-interrupt the current thread to indicate that it was interrupted
+                        Thread.currentThread().interrupt();
+                    }
 
                     robot.Setup_Deposit_Claw(true);
                     robot.Intake(-1.0);
                     follower.followPath(grabPickup1,true);
+                    robot.TransferSample();
                     robot.Setup_Horizontal_Lift(1.0);
                     if(robot.HLL.getPosition() >= 0.9 || robot.HLR.getPosition() >= 0.9){
                         setPathState(2);
@@ -214,8 +215,8 @@ public class Samples extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy()) {
                     try {
-                        // Pause the current thread for 1000 milliseconds (1 second)
-                        Thread.sleep(5000);
+//                         Pause the current thread for 1000 milliseconds (1 second)
+                        Thread.sleep(1500);
                     } catch (InterruptedException e) {
                         // Handle the InterruptedException, which occurs if another thread interrupts this one
                         System.err.println("Thread interrupted during sleep: " + e.getMessage());
