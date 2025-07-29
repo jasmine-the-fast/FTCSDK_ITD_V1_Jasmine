@@ -214,19 +214,10 @@ public class Samples extends OpMode {
                     }
 
                     follower.followPath(grabPickup1,true);
-                    if(follower.getPose().getHeading()<=3){
+                    if(follower.getPose().getHeading()>=335){
                         robot.TransferSample();
                         robot.Intake(-1.0);
                         robot.Setup_Intake_Pose_RTP(false);
-                        try {
-//                     Pause the current thread for 1000 milliseconds (1 second)
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            // Handle the InterruptedException, which occurs if another thread interrupts this one
-                            System.err.println("Thread interrupted during sleep: " + e.getMessage());
-                            // Re-interrupt the current thread to indicate that it was interrupted
-                            Thread.currentThread().interrupt();
-                        }
                         robot.Setup_Horizontal_Lift(1.0);
                     }
 
