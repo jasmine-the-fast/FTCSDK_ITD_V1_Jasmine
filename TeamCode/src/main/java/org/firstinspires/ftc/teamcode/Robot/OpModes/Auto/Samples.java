@@ -195,6 +195,7 @@ public class Samples extends OpMode {
             case 0:
                 robot.Setup_Intake_Pose_RTP(true);
                 robot.Setup_Horizontal_Lift(0.0);
+                robot.Setup_Deposit_Claw(false);
                 follower.followPath(scorePreload,true);
                 sleepMethod(0.5);
                 robot.Setup_Deposit_Arm(0.55);
@@ -232,6 +233,7 @@ public class Samples extends OpMode {
                     robot.Setup_Intake_Pose_RTP(true);
                     robot.Setup_Horizontal_Lift(0.0);
                     robot.TransferSample();
+                    robot.Setup_Deposit_Claw(false);
                     follower.followPath(scorePickup1,true);
                     sleepMethod(0.5);
                     robot.Setup_Deposit_Arm(0.55);
@@ -271,6 +273,8 @@ public class Samples extends OpMode {
                 if(!follower.isBusy()) {
                     robot.Setup_Intake_Pose_RTP(true);
                     robot.Setup_Horizontal_Lift(0.0);
+                    robot.TransferSample();
+                    robot.Setup_Deposit_Claw(false);
                     follower.followPath(scorePickup2,true);
                     sleepMethod(0.5);
                     robot.Setup_Deposit_Arm(0.55);
@@ -310,6 +314,8 @@ public class Samples extends OpMode {
                 if(!follower.isBusy()) {
                     robot.Setup_Intake_Pose_RTP(true);
                     robot.Setup_Horizontal_Lift(0.0);
+                    robot.TransferSample();
+                    robot.Setup_Deposit_Claw(false);
                     follower.followPath(scorePickup3,true);
                     sleepMethod(0.5);
                     robot.Setup_Deposit_Arm(0.55);
