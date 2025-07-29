@@ -44,7 +44,7 @@ public class Samples extends OpMode {
     private final Pose startPose = new Pose(9, 111, Math.toRadians(270));
 
     /** Scoring Pose of our robot. It is facing the submersible at a -45 degree (315 degree) angle. */
-    private final Pose scorePose = new Pose(13, 128, Math.toRadians(315));
+    private final Pose scorePose = new Pose(12, 128, Math.toRadians(315));
 
     /** Lowest (First) Sample from the Spike Mark */
     private final Pose pickup1Pose = new Pose(20, 125, Math.toRadians(343));
@@ -197,16 +197,16 @@ public class Samples extends OpMode {
                 robot.Setup_Horizontal_Lift(0.0);
                 robot.Setup_Deposit_Claw(false);
                 follower.followPath(scorePreload,true);
-                sleepMethod(0.5);
-                robot.Setup_Deposit_Arm(0.55);
-                sleepMethod(1.5);
-                robot.HighBasketScore();
-                sleepMethod(0.1);
+                robot.Setup_Deposit_Arm(0.45);
                 setPathState(1);
                 telemetry.addData("autonomousPathUpdate - 1 path state", pathState);
                 break;
             case 1:
                 if(!follower.isBusy()) {
+                    robot.Setup_Deposit_Arm(0.55);
+                    sleepMethod(1.5);
+                    robot.HighBasketScore();
+                    sleepMethod(1.0);
                     robot.Setup_Deposit_Claw(true);
                     robot.Setup_Deposit_Arm(0.15);
                     sleepMethod(1.5);
@@ -215,37 +215,32 @@ public class Samples extends OpMode {
                     follower.followPath(grabPickup1,true);
                     robot.Setup_Deposit_Arm(0.15);
                     robot.Setup_Intake_Pose_RTP(false);
-                    sleepMethod(1.0);
-                    if(follower.getPose().getX()>=17){
-                        robot.Intake(-1.0);
-                        robot.Setup_Horizontal_Lift(1.0);
-                        sleepMethod(0.3);
-                    }
-                    sleepMethod(0.3);
-                    if(robot.HLL.getPosition() >= 0.9 || robot.HLR.getPosition() >= 0.9){
-                        setPathState(2);
-                    }
+                    setPathState(2);
                 }
                 break;
             case 2:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy()) {
+                    robot.Intake(-1.0);
+                    robot.Setup_Horizontal_Lift(1.0);
+                    sleepMethod(0.3);
                     robot.Setup_Intake_Pose_RTP(true);
                     robot.Setup_Horizontal_Lift(0.0);
                     robot.TransferSample();
+                    sleepMethod(1.0);
                     robot.Setup_Deposit_Claw(false);
                     follower.followPath(scorePickup1,true);
-                    sleepMethod(0.5);
-                    robot.Setup_Deposit_Arm(0.55);
-                    sleepMethod(1.5);
-                    robot.HighBasketScore();
-                    sleepMethod(0.1);
+                    robot.Setup_Deposit_Arm(0.45);
                     setPathState(3);
                 }
                 break;
             case 3:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
+                    robot.Setup_Deposit_Arm(0.55);
+                    sleepMethod(1.5);
+                    robot.HighBasketScore();
+                    sleepMethod(1.0);
                     robot.Setup_Deposit_Claw(true);
                     robot.Setup_Deposit_Arm(0.15);
                     sleepMethod(1.5);
@@ -254,39 +249,33 @@ public class Samples extends OpMode {
                     follower.followPath(grabPickup2,true);
                     robot.Setup_Deposit_Arm(0.15);
                     robot.Setup_Intake_Pose_RTP(false);
-                    sleepMethod(1.0);
-                    if(follower.getPose().getX()>=17){
-                        robot.TransferSample();
-                        robot.Intake(-1.0);
-                        robot.Setup_Horizontal_Lift(1.0);
-                        sleepMethod(0.3);
-                    }
-                    robot.TransferSample();
                     sleepMethod(0.3);
-                    if(robot.HLL.getPosition() >= 0.9 || robot.HLR.getPosition() >= 0.9){
-                        setPathState(4);
-                    }
+                    setPathState(4);
                 }
                 break;
             case 4:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup2Pose's position */
                 if(!follower.isBusy()) {
+                    robot.Intake(-1.0);
+                    robot.Setup_Horizontal_Lift(1.0);
+                    sleepMethod(0.3);
                     robot.Setup_Intake_Pose_RTP(true);
                     robot.Setup_Horizontal_Lift(0.0);
                     robot.TransferSample();
+                    sleepMethod(1.0);
                     robot.Setup_Deposit_Claw(false);
                     follower.followPath(scorePickup2,true);
-                    sleepMethod(0.5);
-                    robot.Setup_Deposit_Arm(0.55);
-                    sleepMethod(1.5);
-                    robot.HighBasketScore();
-                    sleepMethod(0.1);
+                    robot.Setup_Deposit_Arm(0.45);
                     setPathState(5);
                 }
                 break;
             case 5:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
+                    robot.Setup_Deposit_Arm(0.55);
+                    sleepMethod(1.5);
+                    robot.HighBasketScore();
+                    sleepMethod(1.0);
                     robot.Setup_Deposit_Claw(true);
                     robot.Setup_Deposit_Arm(0.15);
                     sleepMethod(1.5);
@@ -295,30 +284,24 @@ public class Samples extends OpMode {
                     follower.followPath(grabPickup3,true);
                     robot.Setup_Deposit_Arm(0.15);
                     robot.Setup_Intake_Pose_RTP(false);
-                    sleepMethod(1.0);
-                    if(follower.getPose().getX()>=17){
-                        robot.TransferSample();
-                        robot.Intake(-1.0);
-                        robot.Setup_Horizontal_Lift(1.0);
-                        sleepMethod(0.3);
-                    }
-                    robot.TransferSample();
                     sleepMethod(0.3);
-                    if(robot.HLL.getPosition() >= 0.9 || robot.HLR.getPosition() >= 0.9){
-                        setPathState(4);
-                    }
+                    setPathState(6);
                 }
                 break;
             case 6:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
+                    robot.Intake(-1.0);
+                    robot.Setup_Horizontal_Lift(1.0);
+                    sleepMethod(0.3);
                     robot.Setup_Intake_Pose_RTP(true);
                     robot.Setup_Horizontal_Lift(0.0);
                     robot.TransferSample();
+                    sleepMethod(1.0);
                     robot.Setup_Deposit_Claw(false);
                     follower.followPath(scorePickup3,true);
                     sleepMethod(0.5);
-                    robot.Setup_Deposit_Arm(0.55);
+                    robot.Setup_Deposit_Arm(0.45);
                     sleepMethod(1.0);
                     robot.HighBasketScore();
                     sleepMethod(0.1);
