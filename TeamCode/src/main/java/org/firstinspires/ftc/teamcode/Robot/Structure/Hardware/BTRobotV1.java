@@ -294,8 +294,8 @@ public class BTRobotV1 {
 
     public void Setup_Intake_Pose_RTP(boolean t) {
         if(t) {
-            IL.setPosition(0.5);
-            IR.setPosition(0.5);
+            IL.setPosition(0.45);
+            IR.setPosition(0.45);
         } else{
             IL.setPosition(0.0);
             IR.setPosition(0.0);
