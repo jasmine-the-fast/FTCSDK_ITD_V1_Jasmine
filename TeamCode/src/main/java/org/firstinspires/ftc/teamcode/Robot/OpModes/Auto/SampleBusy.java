@@ -46,10 +46,10 @@ public class SampleBusy extends OpMode {
     private final Pose startPose = new Pose(9, 111, Math.toRadians(270));
 
     /** Scoring Pose of our robot. It is facing the submersible at a -45 degree (315 degree) angle. */
-    private final Pose scorePose = new Pose(18, 120, Math.toRadians(315));
+    private final Pose scorePose = new Pose(14, 126, Math.toRadians(315));
 
     /** Lowest (First) Sample from the Spike Mark */
-    private final Pose pickup1Pose = new Pose(18, 125, Math.toRadians(0));
+    private final Pose pickup1Pose = new Pose(18, 125, Math.toRadians(350));
 
     /** Middle (Second) Sample from the Spike Mark */
     private final Pose pickup2Pose = new Pose(18, 130, Math.toRadians(0));
@@ -176,7 +176,7 @@ public class SampleBusy extends OpMode {
 //                from init pos to score the first,
                 robot.wristOut();
                 robot.Setup_Intake_Pose_RTP(true);
-                follower.followPath(scorePreload);
+                follower.followPath(scorePreload, true);
 
                 // Wait until motor reaches the target
                 robot.HighBasketScore();
