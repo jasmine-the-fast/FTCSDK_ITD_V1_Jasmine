@@ -49,7 +49,7 @@ public class BTRobotVBusy {
     private ElapsedTime holdTimer = new ElapsedTime();
 
     private boolean showTelemetry = false;
-    public BTRobotV1(OpMode opMode) {
+    public BTRobotVBusy(OpMode opMode) {
         myOpMode = opMode;
     }
     //NOTE: when not talking about a lift L indicates Left and R indicates Right

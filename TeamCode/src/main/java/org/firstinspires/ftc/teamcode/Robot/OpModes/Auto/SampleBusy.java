@@ -177,7 +177,6 @@ public class SampleBusy extends OpMode {
                 robot.wristOut();
                 robot.Setup_Intake_Pose_RTP(true);
                 follower.followPath(scorePreload);
-                pathTimer.resetTimer();
 
                 // Wait until motor reaches the target
                 robot.HighBasketScore();
@@ -416,6 +415,7 @@ public class SampleBusy extends OpMode {
         opmodeTimer = new Timer();
         clawTimer = new Timer();
         wristTimer = new Timer();
+        intakeTimer = new Timer();
         opmodeTimer.resetTimer();
 
         follower = new Follower(hardwareMap, FConstants.class, LConstants.class);
