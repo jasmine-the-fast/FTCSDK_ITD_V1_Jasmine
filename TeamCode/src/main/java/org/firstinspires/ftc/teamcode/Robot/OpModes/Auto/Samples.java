@@ -12,7 +12,7 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
-
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Robot.Structure.Hardware.BTRobotV1;
 import org.firstinspires.ftc.teamcode.Robot.Structure.Library.PoseStorage;
@@ -171,7 +171,7 @@ public class Samples extends OpMode {
         switch (pathState) {
             case 0:
                 robot.Setup_Intake_Pose_RTP(true);
-//                robot.Setup_Horizontal_Lift(0.0);
+                robot.Setup_Horizontal_Lift(0.0);
                 follower.followPath(scorePreload,true);
 //                robot.HighBasketScore();
                 robot.HighBasketScore();
@@ -190,7 +190,6 @@ public class Samples extends OpMode {
                 telemetry.addData("autonomousPathUpdate - 1 path state", pathState);
 
                 break;
-
             case 1:
                 if(!follower.isBusy()) {
 //                   try {
@@ -309,15 +308,6 @@ public class Samples extends OpMode {
                     }
                     robot.Setup_Intake_Pose_RTP(false);
                     robot.Intake(-1.0);
-                    try {
-//                     Pause the current thread for 1000 milliseconds (1 second)
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        // Handle the InterruptedException, which occurs if another thread interrupts this one
-                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
-                        // Re-interrupt the current thread to indicate that it was interrupted
-                        Thread.currentThread().interrupt();
-                    }
                     robot.Setup_Horizontal_Lift(1.0);
 //                    try {
 ////                     Pause the current thread for 1000 milliseconds (1 second)
