@@ -12,7 +12,7 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
+
 
 import org.firstinspires.ftc.teamcode.Robot.Structure.Hardware.BTRobotV1;
 import org.firstinspires.ftc.teamcode.Robot.Structure.Library.PoseStorage;
@@ -47,7 +47,7 @@ public class Samples extends OpMode {
     private final Pose scorePose = new Pose(14, 126, Math.toRadians(315));
 
     /** Lowest (First) Sample from the Spike Mark */
-    private final Pose pickup1Pose = new Pose(18, 125, Math.toRadians(350));
+    private final Pose pickup1Pose = new Pose(18, 125, Math.toRadians(340));
 
     /** Middle (Second) Sample from the Spike Mark */
     private final Pose pickup2Pose = new Pose(18, 130, Math.toRadians(0));
@@ -171,7 +171,7 @@ public class Samples extends OpMode {
         switch (pathState) {
             case 0:
                 robot.Setup_Intake_Pose_RTP(true);
-                robot.Setup_Horizontal_Lift(0.0);
+//                robot.Setup_Horizontal_Lift(0.0);
                 follower.followPath(scorePreload,true);
 //                robot.HighBasketScore();
                 robot.HighBasketScore();
@@ -190,6 +190,7 @@ public class Samples extends OpMode {
                 telemetry.addData("autonomousPathUpdate - 1 path state", pathState);
 
                 break;
+
             case 1:
                 if(!follower.isBusy()) {
 //                   try {
@@ -203,29 +204,36 @@ public class Samples extends OpMode {
 //                    }
 
                     robot.Setup_Deposit_Claw(true);
+                    try {
+//                     Pause the current thread for 1000 milliseconds (1 second)
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        // Handle the InterruptedException, which occurs if another thread interrupts this one
+                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
+                        // Re-interrupt the current thread to indicate that it was interrupted
+                        Thread.currentThread().interrupt();
+                    }
+
                     follower.followPath(grabPickup1,true);
-                    try {
+                    if(follower.getPose().getHeading()<=3){
+                        robot.TransferSample();
+                        robot.Intake(-1.0);
+                        robot.Setup_Intake_Pose_RTP(false);
+                        try {
 //                     Pause the current thread for 1000 milliseconds (1 second)
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        // Handle the InterruptedException, which occurs if another thread interrupts this one
-                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
-                        // Re-interrupt the current thread to indicate that it was interrupted
-                        Thread.currentThread().interrupt();
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            // Handle the InterruptedException, which occurs if another thread interrupts this one
+                            System.err.println("Thread interrupted during sleep: " + e.getMessage());
+                            // Re-interrupt the current thread to indicate that it was interrupted
+                            Thread.currentThread().interrupt();
+                        }
+                        robot.Setup_Horizontal_Lift(1.0);
                     }
-                    robot.TransferSample();
-                    try {
-//                     Pause the current thread for 1000 milliseconds (1 second)
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        // Handle the InterruptedException, which occurs if another thread interrupts this one
-                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
-                        // Re-interrupt the current thread to indicate that it was interrupted
-                        Thread.currentThread().interrupt();
-                    }
-                    robot.Intake(-1.0);
-                    robot.Setup_Intake_Pose_RTP(false);
-                    robot.Setup_Horizontal_Lift(1.0);
+
+
+
+
                     if(robot.HLL.getPosition() >= 0.9 || robot.HLR.getPosition() >= 0.9){
                         setPathState(2);
                     }
@@ -301,6 +309,15 @@ public class Samples extends OpMode {
                     }
                     robot.Setup_Intake_Pose_RTP(false);
                     robot.Intake(-1.0);
+                    try {
+//                     Pause the current thread for 1000 milliseconds (1 second)
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        // Handle the InterruptedException, which occurs if another thread interrupts this one
+                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
+                        // Re-interrupt the current thread to indicate that it was interrupted
+                        Thread.currentThread().interrupt();
+                    }
                     robot.Setup_Horizontal_Lift(1.0);
 //                    try {
 ////                     Pause the current thread for 1000 milliseconds (1 second)

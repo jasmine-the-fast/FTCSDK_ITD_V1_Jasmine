@@ -12,14 +12,12 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
+
 
 import org.firstinspires.ftc.teamcode.Robot.Structure.Hardware.BTRobotVBusy;
 import org.firstinspires.ftc.teamcode.Robot.Structure.Library.PoseStorage;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
-
-import java.sql.Time;
 
 @Autonomous(name = "SampleBusy_Auto", group = "OpMode")
 public class SampleBusy extends OpMode {
@@ -30,6 +28,7 @@ public class SampleBusy extends OpMode {
     /** This is the variable where we store the state of our auto.
      * It is used by the pathUpdate method. */
     private int pathState, commandState;
+    private int realState;
 
     public String Color_Alliance = null;
 
@@ -49,7 +48,7 @@ public class SampleBusy extends OpMode {
     private final Pose scorePose = new Pose(14, 126, Math.toRadians(315));
 
     /** Lowest (First) Sample from the Spike Mark */
-    private final Pose pickup1Pose = new Pose(18, 125, Math.toRadians(350));
+    private final Pose pickup1Pose = new Pose(18, 125, Math.toRadians(340));
 
     /** Middle (Second) Sample from the Spike Mark */
     private final Pose pickup2Pose = new Pose(18, 130, Math.toRadians(0));
@@ -73,11 +72,10 @@ public class SampleBusy extends OpMode {
      * The Robot will not go to this pose, it is used a control point for our bezier curve. */
 
     /* These are our Paths and PathChains that we will define in buildPaths() */
-    private Path park;
-    private PathChain scorePreload, grabPickup1, grabPickup2, grabPickup3, scorePickup1, scorePickup2, scorePickup3, grabSubPose1, scoreSubPose1, grabSubPose2, scoreSubPose2;
-    private Timer wristTimer;
-    private Timer intakeTimer;
-    private Timer clawTimer;
+    private Path scorePreload, park;
+//    private PathChain grabPickup1, grabPickup2, grabPickup3, scorePickup1, scorePickup2, scorePickup3;
+    private PathChain grabPickup1, grabPickup2, grabPickup3, scorePickup1, scorePickup2, scorePickup3, grabSubPose1, scoreSubPose1, grabSubPose2, scoreSubPose2;
+
     /** Build the paths for the auto (adds, for example, constant/linear headings while doing paths)
      * It is necessary to do this so that all the paths are built before the auto starts. **/
     public void buildPaths() {
@@ -98,10 +96,8 @@ public class SampleBusy extends OpMode {
          * Here is a explanation of the difference between Paths and PathChains <https://pedropathing.com/commonissues/pathtopathchain.html> */
 
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
-        scorePreload = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPose), new Point(scorePose)))
-                .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
-                .build();
+        scorePreload = new Path(new BezierLine(new Point(startPose), new Point(scorePose)));
+        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
 
         /* Here is an example for Constant Interpolation
         scorePreload.setConstantInterpolation(startPose.getHeading()); */
@@ -170,215 +166,117 @@ public class SampleBusy extends OpMode {
     /** This switch is called continuously and runs the pathing, at certain points, it triggers the action state.
      * Everytime the switch changes case, it will reset the timer. (This is because of the setPathState() method)
      * The followPath() function sets the follower to run the specific path, but does NOT wait for it to finish before moving on. */
+    public void timerScore(){
+        actionTimer.resetTimer();
+        robot.wristOut();
+        while (actionTimer.getElapsedTimeSeconds()<1){
+            telemetry.addLine("wait for wrist out");
+        }
+        robot.HighBasketScore();
+        while (actionTimer.getElapsedTimeSeconds()<3){
+            telemetry.addLine("wait for v slide");
+        }
+        robot.wristBack();
+        robot.TransferSample();
+    }
+    public void intakeOut(){
+        //not timing it, because very likely it will be followed by a pedro moving
+        robot.Intake(-1.0);
+        robot.Setup_Intake_Pose_RTP(false);
+//                    robot.Horizontal_Lift(true);a
+        robot.Setup_Horizontal_Lift(1.0);
+    }
+    public void intakeBack(){
+        robot.Setup_Intake_Pose_RTP(true);
+        robot.Setup_Horizontal_Lift(0.0);
+        robot.Intake(0);
+        robot.Setup_Deposit_Claw(false);
+    }
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-//                from init pos to score the first,
-                robot.wristOut();
+                realState = 0;
+                telemetry.addLine("case0");
+                telemetry.update();
                 robot.Setup_Intake_Pose_RTP(true);
-                follower.followPath(scorePreload, true);
-
-                // Wait until motor reaches the target
-                robot.HighBasketScore();
-                while (robot.VLL.isBusy()) {
-                    // Optional: telemetry for debugging
-                    telemetry.addLine("1150: case0, waiting for vertical slide");
-                    telemetry.update();
-                }
-
-                clawTimer.resetTimer();
-                robot.Setup_Deposit_Claw(true);
-                robot.wristBack();
-                while ( clawTimer.getElapsedTimeSeconds() < 3.5) {
-                    // Optional: do nothing or update telemetry
-                    telemetry.addLine("1150: case0, waiting for wrist");
-                    telemetry.update();
-                }
-
-                robot.TransferSample(); //verticle Slides down
-                while (robot.VLL.isBusy()) {
-                    // Optional: telemetry for debugging
-                    telemetry.addLine("1150: case0, waiting for transfer");
-                    telemetry.update();
-                }
-
+                robot.wristOut();
+                follower.followPath(scorePreload);
                 setPathState(1);
                 break;
-            case 1: //get first specimen
-                //
-                robot.Intake(-1.0);
-                robot.Setup_Intake_Pose_RTP(false);
-                follower.followPath(grabPickup1,true);
-                robot.Horizontal_Lift(true);
-                //reach out to grab
-                intakeTimer.resetTimer();
-                while (follower.isBusy()){
-                    telemetry.addLine("1150: case1, waiting for grabPickup1");
-                    telemetry.update();
+            case 1:
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 2) {
+                    realState = 1;
+                    timerScore();
+                    intakeOut();
+                    follower.followPath(grabPickup1,true);
+                    setPathState(2);
                 }
-                while ( intakeTimer.getElapsedTimeSeconds() < 2) {
-                    // Optional: do nothing or update telemetry
-                    telemetry.addLine("case1, waiting for hori lift out");
-                    telemetry.update();
-                }
-                robot.Intake(0.0);
-                //back
-                intakeTimer.resetTimer();
-                robot.Setup_Intake_Pose_RTP(true);
-                robot.Horizontal_Lift(false);
-                while ( intakeTimer.getElapsedTimeSeconds() < 1.5) {
-                    // Optional: do nothing or update telemetry
-                    telemetry.addLine("case1, waiting for hori lift back");
-                    telemetry.update();
-                }
-                setPathState(2);
                 break;
             case 2:
-                //score the 1st sample (the holding one at beginning is sample#0
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
-                robot.Setup_Intake_Pose_RTP(true);
-                robot.wristOut();
-                follower.followPath(scorePickup1,true);
-                while (follower.isBusy()){
-                    telemetry.addData("waiting for robot to be at postion ", "%.2f seconds", clawTimer.getElapsedTimeSeconds());
-                    telemetry.update();
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
+                    realState = 2;
+                    intakeBack();
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                    follower.followPath(scorePickup1,true);
+                    setPathState(3);
                 }
-
-                robot.HighBasketScore();
-                while (robot.VLL.isBusy()) {
-                    // Optional: telemetry for debugging
-                    telemetry.addLine("case0, waiting for vertical slide");
-                    telemetry.update();
-                }
-
-                clawTimer.resetTimer();
-                robot.Setup_Deposit_Claw(true);
-                robot.wristBack();
-                while ( clawTimer.getElapsedTimeSeconds() < 0.5) {
-                    // Optional: do nothing or update telemetry
-                    telemetry.addLine("case0, waiting for wrist");
-                    telemetry.update();
-                }
-
-                robot.TransferSample(); //verticle Slides down
-                while (robot.VLL.isBusy()) {
-                    // Optional: telemetry for debugging
-                    telemetry.addLine("case0, waiting for transfer");
-                    telemetry.update();
-                }
-
-                setPathState(3);
                 break;
             case 3:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                robot.Intake(-1.0);
-                robot.Setup_Intake_Pose_RTP(false);
-                follower.followPath(grabPickup2,true);
-                robot.Horizontal_Lift(true);
-
-                intakeTimer.resetTimer();
-                while (follower.isBusy()){
-                    telemetry.addData("waiting for robot to be at postion ", robot.VLL.getCurrentPosition());
-                    telemetry.update();
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
+                    realState = 3;
+                    timerScore();
+                    intakeOut();
+                    follower.followPath(grabPickup2,true);
+                    setPathState(4);
                 }
-                while ( intakeTimer.getElapsedTimeSeconds() < 2) {
-                    // Optional: do nothing or update telemetry
-                    telemetry.addData("Waiting for claw", "%.2f seconds", clawTimer.getElapsedTimeSeconds());
-                    telemetry.update();
-                }
-                intakeTimer.resetTimer();
-                robot.Setup_Intake_Pose_RTP(true);
-                robot.Horizontal_Lift(false);
-
-                robot.TransferSample(); //verticle Slides down
-                while ( intakeTimer.getElapsedTimeSeconds() < 1) {
-                    // Optional: do nothing or update telemetry
-                    telemetry.addData("Waiting for claw", "%.2f seconds", clawTimer.getElapsedTimeSeconds());
-                    telemetry.update();
-                }
-                setPathState(4);
                 break;
             case 4:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup2Pose's position */
-                if(!follower.isBusy()) {
-                    robot.Setup_Intake_Pose_RTP(true);
-                    follower.followPath(scorePickup1,true);
-                    pathTimer.resetTimer();
-                    if(pathTimer.getElapsedTime() >= 500) {
-                        robot.HighBasketScore();
-                        if (robot.VLL.getCurrentPosition() >= 745 || robot.VLR.getCurrentPosition() >= 745) {
-                            robot.Setup_Deposit_Claw(true);
-                        }
-                        if (robot.DC.getPosition() >= 0.3) {
-                            setPathState(5);
-                        }
-                    }
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
+                    realState = 4;
+                    intakeBack();
+                    follower.followPath(scorePickup2,true);
+                    setPathState(5);
                 }
                 break;
             case 5:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if(!follower.isBusy()) {
-                    robot.TransferSample();
-                    robot.Intake(-1.0);
-                    follower.followPath(grabPickup1,true);
-                    pathTimer.resetTimer();
-                    if(pathTimer.getElapsedTime() >= 500) {
-                        robot.Setup_Horizontal_Lift(1.0);
-                        if (robot.HLL.getPosition() >= 0.9 || robot.HLR.getPosition() >= 0.9) {
-                            setPathState(6);
-                        }
-                    }
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
+                    realState = 5;
+                    timerScore();
+                    intakeOut();
+                    follower.followPath(grabPickup3,true);
+                    setPathState(6);
                 }
                 break;
             case 6:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
-                if(!follower.isBusy()) {
-                    robot.Setup_Intake_Pose_RTP(true);
-                    follower.followPath(scorePickup1,true);
-                    pathTimer.resetTimer();
-                    if(pathTimer.getElapsedTime() >= 500) {
-                        robot.HighBasketScore();
-                        if (robot.VLL.getCurrentPosition() >= 745 || robot.VLR.getCurrentPosition() >= 745) {
-                            robot.Setup_Deposit_Claw(true);
-                        }
-                        if (robot.DC.getPosition() >= 0.3) {
-                            setPathState(7);
-                        }
-                    }
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
+                    realState = 6;
+                    intakeBack();
+                    follower.followPath(scorePickup3, true);
+                    setPathState(7);
                 }
                 break;
             case 7:
-                if(!follower.isBusy()) {
-                    follower.followPath(grabSubPose1, true);
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
+                    realState = 7;
+                    timerScore();
+                    follower.followPath(park,true);
                     setPathState(8);
                 }
                 break;
             case 8:
-                if(!follower.isBusy()) {
-                    follower.followPath(scoreSubPose1, true);
-                    setPathState(9);
-                }
-                break;
-            case 9:
-                if(!follower.isBusy()) {
-                    follower.followPath(grabSubPose2, true);
-                    setPathState(10);
-                }
-                break;
-            case 10:
-                if(!follower.isBusy()) {
-                    follower.followPath(scoreSubPose2, true);
-                    setPathState(11);
-                }
-                break;
-            case 11:
-                if(!follower.isBusy()) {
-                    follower.followPath(park,true);
-                    setPathState(12);
-                }
-                break;
-            case 12:
-                if(!follower.isBusy()) {
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
+                    realState = 8;
+                    /* Level 1 Ascent */
+
+                    /* Set the state to a Case we won't use or define, so it just stops running an new paths */
                     setPathState(-1);
                 }
                 break;
@@ -395,13 +293,14 @@ public class SampleBusy extends OpMode {
     /** This is the main loop of the OpMode, it will run repeatedly after clicking "Play". **/
     @Override
     public void loop() {
-        robot.Intake_Poop(robot.intakeColor.equals(Color_Alliance) || robot.intakeColor.equals("Yellow"));
+
         // These loop the movements of the robot
         follower.update();
         autonomousPathUpdate();
 
         // Feedback to Driver Hub
         telemetry.addData("path state", pathState);
+        telemetry.addData("real state", realState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
@@ -413,11 +312,10 @@ public class SampleBusy extends OpMode {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
-        clawTimer = new Timer();
-        wristTimer = new Timer();
-        intakeTimer = new Timer();
         opmodeTimer.resetTimer();
+        actionTimer = new Timer();
 
+        Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap, FConstants.class, LConstants.class);
         follower.setStartingPose(startPose);
         buildPaths();
@@ -436,13 +334,11 @@ public class SampleBusy extends OpMode {
     @Override
     public void start() {
         opmodeTimer.resetTimer();
-        pathTimer.resetTimer();
         setPathState(0);
     }
 
     /** We do not use this because everything should automatically disable **/
     @Override
     public void stop() {
-        PoseStorage.CurrentPose = follower.getPose();
     }
 }
