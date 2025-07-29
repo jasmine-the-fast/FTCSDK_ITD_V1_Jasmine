@@ -38,7 +38,7 @@ public class BTRobotV1 {
 
     public double DA_Rotation = 0;
     public double DA_Increment = 0.1;
-    final public double DA_MIN_Rotation = 0.17;
+    final public double DA_MIN_Rotation = 0.15;
     final public double DA_MAX_Rotation = 0.95;
 
     public String intakeColor;
@@ -294,8 +294,8 @@ public class BTRobotV1 {
 
     public void Setup_Intake_Pose_RTP(boolean t) {
         if(t) {
-            IL.setPosition(0.4);
-            IR.setPosition(0.4);
+            IL.setPosition(0.5);
+            IR.setPosition(0.5);
         } else{
             IL.setPosition(0.0);
             IR.setPosition(0.0);
@@ -354,8 +354,8 @@ public class BTRobotV1 {
     }
 
     public void TransferSample(){
-        Setup_Deposit_Arm(0.17);
-        Setup_Deposit_Wrist(0.25);
+        Setup_Deposit_Arm(0.15);
+        Setup_Deposit_Wrist(0.27);
         Setup_Vertical_Lift(0, 1.0);
     }
 }
