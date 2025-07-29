@@ -346,7 +346,7 @@ public class BTRobotVBusy {
         Setup_Vertical_Lift(800, 1.0);
     }
     public void wristOut(){
-        Setup_Deposit_Arm(0.6);
+        Setup_Deposit_Arm(0.5);
         Setup_Deposit_Wrist(0.18);
     }
     public void wristBack(){

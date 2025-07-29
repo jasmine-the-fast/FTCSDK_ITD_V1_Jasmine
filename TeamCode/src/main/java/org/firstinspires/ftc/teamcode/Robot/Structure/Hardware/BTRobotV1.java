@@ -38,7 +38,7 @@ public class BTRobotV1 {
 
     public double DA_Rotation = 0;
     public double DA_Increment = 0.1;
-    final public double DA_MIN_Rotation = 0.0;
+    final public double DA_MIN_Rotation = 0.17;
     final public double DA_MAX_Rotation = 0.95;
 
     public String intakeColor;
@@ -341,10 +341,7 @@ public class BTRobotV1 {
     }
 
     public void HighBasketScore(){
-        Setup_Intake_Pose_RTP(true);
-        Setup_Horizontal_Lift(0.0);
-        Setup_Deposit_Claw(false);
-        Setup_Deposit_Arm(0.5);
+        Setup_Deposit_Arm(0.55);
         Setup_Deposit_Wrist(0.1);
         Setup_Vertical_Lift(760, 1.0);
     }
@@ -357,9 +354,8 @@ public class BTRobotV1 {
     }
 
     public void TransferSample(){
-        Setup_Deposit_Claw(true);
-        Setup_Deposit_Arm(0.13);
-        Setup_Deposit_Wrist(0.28);
+        Setup_Deposit_Arm(0.17);
+        Setup_Deposit_Wrist(0.25);
         Setup_Vertical_Lift(0, 1.0);
     }
 }

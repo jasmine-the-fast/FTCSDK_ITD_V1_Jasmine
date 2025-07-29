@@ -166,6 +166,29 @@ public class Samples extends OpMode {
     /** This switch is called continuously and runs the pathing, at certain points, it triggers the action state.
      * Everytime the switch changes case, it will reset the timer. (This is because of the setPathState() method)
      * The followPath() function sets the follower to run the specific path, but does NOT wait for it to finish before moving on. */
+    public void timeWristOut(){
+        actionTimer.resetTimer();
+        robot.Setup_Deposit_Arm(0.5);
+        robot.Setup_Deposit_Wrist(0.1);
+        while (actionTimer.getElapsedTimeSeconds()<5){
+            telemetry.addLine("wait for wrist out");
+        }
+    }
+    public void timeArmForTransfer(){
+        actionTimer.resetTimer();
+        robot.Setup_Deposit_Arm(0.18);
+        while (actionTimer.getElapsedTimeSeconds()<3){
+            telemetry.addLine("wait for wrist out");
+        }
+    }
+    public void timeWristIn() {
+        actionTimer.resetTimer();
+        robot.Setup_Deposit_Arm(0.13);
+        robot.Setup_Deposit_Wrist(0.28);
+        while (actionTimer.getElapsedTimeSeconds() < 5) {
+            telemetry.addLine("wait for wrist in");
+        }
+    }
     public void autonomousPathUpdate() {
         telemetry.addData("autonomousPathUpdate - path state", pathState);
         switch (pathState) {
@@ -176,15 +199,7 @@ public class Samples extends OpMode {
 //                robot.HighBasketScore();
                 robot.HighBasketScore();
                 robot.Setup_Deposit_Claw(false);
-                try {
-//                     Pause the current thread for 1000 milliseconds (1 second)
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    // Handle the InterruptedException, which occurs if another thread interrupts this one
-                    System.err.println("Thread interrupted during sleep: " + e.getMessage());
-                    // Re-interrupt the current thread to indicate that it was interrupted
-                    Thread.currentThread().interrupt();
-                }
+
 
                 setPathState(1);
                 telemetry.addData("autonomousPathUpdate - 1 path state", pathState);
@@ -212,10 +227,11 @@ public class Samples extends OpMode {
                         // Re-interrupt the current thread to indicate that it was interrupted
                         Thread.currentThread().interrupt();
                     }
-
                     follower.followPath(grabPickup1,true);
-                    if(follower.getPose().getHeading()>=335){
-                        robot.TransferSample();
+                    robot.TransferSample();
+                    if(follower.getPose().getX()>=17){
+
+
                         robot.Intake(-1.0);
                         robot.Setup_Intake_Pose_RTP(false);
                         robot.Setup_Horizontal_Lift(1.0);
@@ -421,6 +437,7 @@ public class Samples extends OpMode {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
+        actionTimer = new Timer();
 
         follower = new Follower(hardwareMap, FConstants.class, LConstants.class);
         follower.setStartingPose(startPose);
