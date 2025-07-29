@@ -182,23 +182,23 @@ public class SampleBusy extends OpMode {
                 robot.HighBasketScore();
                 while (robot.VLL.isBusy()) {
                     // Optional: telemetry for debugging
-                    telemetry.addLine("case0, waiting for vertical slide");
+                    telemetry.addLine("1150: case0, waiting for vertical slide");
                     telemetry.update();
                 }
 
                 clawTimer.resetTimer();
                 robot.Setup_Deposit_Claw(true);
                 robot.wristBack();
-                while ( clawTimer.getElapsedTimeSeconds() < 0.5) {
+                while ( clawTimer.getElapsedTimeSeconds() < 3.5) {
                     // Optional: do nothing or update telemetry
-                    telemetry.addLine("case0, waiting for wrist");
+                    telemetry.addLine("1150: case0, waiting for wrist");
                     telemetry.update();
                 }
 
                 robot.TransferSample(); //verticle Slides down
                 while (robot.VLL.isBusy()) {
                     // Optional: telemetry for debugging
-                    telemetry.addLine("case0, waiting for transfer");
+                    telemetry.addLine("1150: case0, waiting for transfer");
                     telemetry.update();
                 }
 
@@ -213,7 +213,7 @@ public class SampleBusy extends OpMode {
                 //reach out to grab
                 intakeTimer.resetTimer();
                 while (follower.isBusy()){
-                    telemetry.addLine("case1, waiting for grabPickup1");
+                    telemetry.addLine("1150: case1, waiting for grabPickup1");
                     telemetry.update();
                 }
                 while ( intakeTimer.getElapsedTimeSeconds() < 2) {
