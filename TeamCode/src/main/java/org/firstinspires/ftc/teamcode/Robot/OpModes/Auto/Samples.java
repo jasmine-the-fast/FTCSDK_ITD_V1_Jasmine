@@ -44,10 +44,10 @@ public class Samples extends OpMode {
     private final Pose startPose = new Pose(9, 111, Math.toRadians(270));
 
     /** Scoring Pose of our robot. It is facing the submersible at a -45 degree (315 degree) angle. */
-    private final Pose scorePose = new Pose(12, 128, Math.toRadians(315));
+    private final Pose scorePose = new Pose(14, 126, Math.toRadians(315));
 
     /** Lowest (First) Sample from the Spike Mark */
-    private final Pose pickup1Pose = new Pose(18, 125, Math.toRadians(0));
+    private final Pose pickup1Pose = new Pose(18, 125, Math.toRadians(350));
 
     /** Middle (Second) Sample from the Spike Mark */
     private final Pose pickup2Pose = new Pose(18, 130, Math.toRadians(0));
@@ -171,6 +171,7 @@ public class Samples extends OpMode {
         switch (pathState) {
             case 0:
                 robot.Setup_Intake_Pose_RTP(true);
+                robot.Setup_Horizontal_Lift(0.0);
                 follower.followPath(scorePreload,true);
 //                robot.HighBasketScore();
                 robot.HighBasketScore();
@@ -191,20 +192,39 @@ public class Samples extends OpMode {
                 break;
             case 1:
                 if(!follower.isBusy()) {
-                   try {
+//                   try {
 //                     Pause the current thread for 1000 milliseconds (1 second)
-                        Thread.sleep(1500);
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException e) {
+//                        // Handle the InterruptedException, which occurs if another thread interrupts this one
+//                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
+//                        // Re-interrupt the current thread to indicate that it was interrupted
+//                        Thread.currentThread().interrupt();
+//                    }
+
+                    robot.Setup_Deposit_Claw(true);
+                    follower.followPath(grabPickup1,true);
+                    try {
+//                     Pause the current thread for 1000 milliseconds (1 second)
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         // Handle the InterruptedException, which occurs if another thread interrupts this one
                         System.err.println("Thread interrupted during sleep: " + e.getMessage());
                         // Re-interrupt the current thread to indicate that it was interrupted
                         Thread.currentThread().interrupt();
                     }
-
-                    robot.Setup_Deposit_Claw(true);
-                    robot.Intake(-1.0);
-                    follower.followPath(grabPickup1,true);
                     robot.TransferSample();
+                    try {
+//                     Pause the current thread for 1000 milliseconds (1 second)
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        // Handle the InterruptedException, which occurs if another thread interrupts this one
+                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
+                        // Re-interrupt the current thread to indicate that it was interrupted
+                        Thread.currentThread().interrupt();
+                    }
+                    robot.Intake(-1.0);
+                    robot.Setup_Intake_Pose_RTP(false);
                     robot.Setup_Horizontal_Lift(1.0);
                     if(robot.HLL.getPosition() >= 0.9 || robot.HLR.getPosition() >= 0.9){
                         setPathState(2);
@@ -216,7 +236,7 @@ public class Samples extends OpMode {
                 if(!follower.isBusy()) {
                     try {
 //                         Pause the current thread for 1000 milliseconds (1 second)
-                        Thread.sleep(1500);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         // Handle the InterruptedException, which occurs if another thread interrupts this one
                         System.err.println("Thread interrupted during sleep: " + e.getMessage());
@@ -224,7 +244,28 @@ public class Samples extends OpMode {
                         Thread.currentThread().interrupt();
                     }
                     robot.Setup_Intake_Pose_RTP(true);
+                    robot.Setup_Horizontal_Lift(0.0);
                     follower.followPath(scorePickup1,true);
+                    try {
+//                         Pause the current thread for 1000 milliseconds (1 second)
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        // Handle the InterruptedException, which occurs if another thread interrupts this one
+                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
+                        // Re-interrupt the current thread to indicate that it was interrupted
+                        Thread.currentThread().interrupt();
+                    }
+                    robot.Intake(0);
+                    robot.Setup_Deposit_Claw(false);
+                    try {
+//                         Pause the current thread for 1000 milliseconds (1 second)
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        // Handle the InterruptedException, which occurs if another thread interrupts this one
+                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
+                        // Re-interrupt the current thread to indicate that it was interrupted
+                        Thread.currentThread().interrupt();
+                    }
                     robot.HighBasketScore();
                     if(robot.VLL.getCurrentPosition() >= 745 || robot.VLR.getCurrentPosition() >= 745){
                         robot.Setup_Deposit_Claw(true);
@@ -237,9 +278,39 @@ public class Samples extends OpMode {
             case 3:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
+                    robot.Setup_Deposit_Claw(true);
+                    follower.followPath(grabPickup2,true);
+                    try {
+//                     Pause the current thread for 1000 milliseconds (1 second)
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        // Handle the InterruptedException, which occurs if another thread interrupts this one
+                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
+                        // Re-interrupt the current thread to indicate that it was interrupted
+                        Thread.currentThread().interrupt();
+                    }
+                    robot.TransferSample();
+                    try {
+//                     Pause the current thread for 1000 milliseconds (1 second)
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        // Handle the InterruptedException, which occurs if another thread interrupts this one
+                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
+                        // Re-interrupt the current thread to indicate that it was interrupted
+                        Thread.currentThread().interrupt();
+                    }
+                    robot.Setup_Intake_Pose_RTP(false);
                     robot.Intake(-1.0);
-                    follower.followPath(grabPickup1,true);
                     robot.Setup_Horizontal_Lift(1.0);
+//                    try {
+////                     Pause the current thread for 1000 milliseconds (1 second)
+//                        Thread.sleep(5000);
+//                    } catch (InterruptedException e) {
+//                        // Handle the InterruptedException, which occurs if another thread interrupts this one
+//                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
+//                        // Re-interrupt the current thread to indicate that it was interrupted
+//                        Thread.currentThread().interrupt();
+//                    }
                     if(robot.HLL.getPosition() >= 0.9 || robot.HLR.getPosition() >= 0.9){
                         setPathState(4);
                     }
