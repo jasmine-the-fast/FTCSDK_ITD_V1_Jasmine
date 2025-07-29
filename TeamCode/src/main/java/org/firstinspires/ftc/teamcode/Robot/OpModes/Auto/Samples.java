@@ -173,56 +173,20 @@ public class Samples extends OpMode {
                 robot.Setup_Intake_Pose_RTP(true);
                 robot.Setup_Horizontal_Lift(0.0);
                 follower.followPath(scorePreload,true);
-//                robot.HighBasketScore();
                 robot.HighBasketScore();
                 robot.Setup_Deposit_Claw(false);
-                try {
-//                     Pause the current thread for 1000 milliseconds (1 second)
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    // Handle the InterruptedException, which occurs if another thread interrupts this one
-                    System.err.println("Thread interrupted during sleep: " + e.getMessage());
-                    // Re-interrupt the current thread to indicate that it was interrupted
-                    Thread.currentThread().interrupt();
-                }
-
+                sleepMethod(1.0);
                 setPathState(1);
                 telemetry.addData("autonomousPathUpdate - 1 path state", pathState);
 
                 break;
             case 1:
                 if(!follower.isBusy()) {
-//                   try {
-//                     Pause the current thread for 1000 milliseconds (1 second)
-//                        Thread.sleep(500);
-//                    } catch (InterruptedException e) {
-//                        // Handle the InterruptedException, which occurs if another thread interrupts this one
-//                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
-//                        // Re-interrupt the current thread to indicate that it was interrupted
-//                        Thread.currentThread().interrupt();
-//                    }
-
                     robot.Setup_Deposit_Claw(true);
                     follower.followPath(grabPickup1,true);
-                    try {
-//                     Pause the current thread for 1000 milliseconds (1 second)
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        // Handle the InterruptedException, which occurs if another thread interrupts this one
-                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
-                        // Re-interrupt the current thread to indicate that it was interrupted
-                        Thread.currentThread().interrupt();
-                    }
+                    sleepMethod(1.0);
                     robot.TransferSample();
-                    try {
-//                     Pause the current thread for 1000 milliseconds (1 second)
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        // Handle the InterruptedException, which occurs if another thread interrupts this one
-                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
-                        // Re-interrupt the current thread to indicate that it was interrupted
-                        Thread.currentThread().interrupt();
-                    }
+                    sleepMethod(1.0);
                     robot.Intake(-1.0);
                     robot.Setup_Intake_Pose_RTP(false);
                     robot.Setup_Horizontal_Lift(1.0);
@@ -234,38 +198,14 @@ public class Samples extends OpMode {
             case 2:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy()) {
-                    try {
-//                         Pause the current thread for 1000 milliseconds (1 second)
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        // Handle the InterruptedException, which occurs if another thread interrupts this one
-                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
-                        // Re-interrupt the current thread to indicate that it was interrupted
-                        Thread.currentThread().interrupt();
-                    }
+                    sleepMethod(1.0);
                     robot.Setup_Intake_Pose_RTP(true);
                     robot.Setup_Horizontal_Lift(0.0);
                     follower.followPath(scorePickup1,true);
-                    try {
-//                         Pause the current thread for 1000 milliseconds (1 second)
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        // Handle the InterruptedException, which occurs if another thread interrupts this one
-                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
-                        // Re-interrupt the current thread to indicate that it was interrupted
-                        Thread.currentThread().interrupt();
-                    }
+                    sleepMethod(1.0);
                     robot.Intake(0);
                     robot.Setup_Deposit_Claw(false);
-                    try {
-//                         Pause the current thread for 1000 milliseconds (1 second)
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        // Handle the InterruptedException, which occurs if another thread interrupts this one
-                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
-                        // Re-interrupt the current thread to indicate that it was interrupted
-                        Thread.currentThread().interrupt();
-                    }
+                    sleepMethod(1.0);
                     robot.HighBasketScore();
                     if(robot.VLL.getCurrentPosition() >= 745 || robot.VLR.getCurrentPosition() >= 745){
                         robot.Setup_Deposit_Claw(true);
@@ -280,37 +220,12 @@ public class Samples extends OpMode {
                 if(!follower.isBusy()) {
                     robot.Setup_Deposit_Claw(true);
                     follower.followPath(grabPickup2,true);
-                    try {
-//                     Pause the current thread for 1000 milliseconds (1 second)
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        // Handle the InterruptedException, which occurs if another thread interrupts this one
-                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
-                        // Re-interrupt the current thread to indicate that it was interrupted
-                        Thread.currentThread().interrupt();
-                    }
+                    sleepMethod(1.0);
                     robot.TransferSample();
-                    try {
-//                     Pause the current thread for 1000 milliseconds (1 second)
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        // Handle the InterruptedException, which occurs if another thread interrupts this one
-                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
-                        // Re-interrupt the current thread to indicate that it was interrupted
-                        Thread.currentThread().interrupt();
-                    }
+                    sleepMethod(1.0);
                     robot.Setup_Intake_Pose_RTP(false);
                     robot.Intake(-1.0);
                     robot.Setup_Horizontal_Lift(1.0);
-//                    try {
-////                     Pause the current thread for 1000 milliseconds (1 second)
-//                        Thread.sleep(5000);
-//                    } catch (InterruptedException e) {
-//                        // Handle the InterruptedException, which occurs if another thread interrupts this one
-//                        System.err.println("Thread interrupted during sleep: " + e.getMessage());
-//                        // Re-interrupt the current thread to indicate that it was interrupted
-//                        Thread.currentThread().interrupt();
-//                    }
                     if(robot.HLL.getPosition() >= 0.9 || robot.HLR.getPosition() >= 0.9){
                         setPathState(4);
                     }
@@ -319,8 +234,14 @@ public class Samples extends OpMode {
             case 4:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup2Pose's position */
                 if(!follower.isBusy()) {
+                    sleepMethod(1.0);
                     robot.Setup_Intake_Pose_RTP(true);
-                    follower.followPath(scorePickup1,true);
+                    robot.Setup_Horizontal_Lift(0.0);
+                    follower.followPath(scorePickup2,true);
+                    sleepMethod(1.0);
+                    robot.Intake(0);
+                    robot.Setup_Deposit_Claw(false);
+                    sleepMethod(1.0);
                     robot.HighBasketScore();
                     if(robot.VLL.getCurrentPosition() >= 745 || robot.VLR.getCurrentPosition() >= 745){
                         robot.Setup_Deposit_Claw(true);
@@ -333,8 +254,13 @@ public class Samples extends OpMode {
             case 5:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
+                    robot.Setup_Deposit_Claw(true);
+                    follower.followPath(grabPickup3,true);
+                    sleepMethod(1.0);
+                    robot.TransferSample();
+                    sleepMethod(1.0);
+                    robot.Setup_Intake_Pose_RTP(false);
                     robot.Intake(-1.0);
-                    follower.followPath(grabPickup1,true);
                     robot.Setup_Horizontal_Lift(1.0);
                     if(robot.HLL.getPosition() >= 0.9 || robot.HLR.getPosition() >= 0.9){
                         setPathState(6);
@@ -344,8 +270,14 @@ public class Samples extends OpMode {
             case 6:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
+                    sleepMethod(1.0);
                     robot.Setup_Intake_Pose_RTP(true);
-                    follower.followPath(scorePickup1,true);
+                    robot.Setup_Horizontal_Lift(0.0);
+                    follower.followPath(scorePickup3,true);
+                    sleepMethod(1.0);
+                    robot.Intake(0);
+                    robot.Setup_Deposit_Claw(false);
+                    sleepMethod(1.0);
                     robot.HighBasketScore();
                     if(robot.VLL.getCurrentPosition() >= 745 || robot.VLR.getCurrentPosition() >= 745){
                         robot.Setup_Deposit_Claw(true);
@@ -357,26 +289,70 @@ public class Samples extends OpMode {
                 break;
             case 7:
                 if(!follower.isBusy()) {
-                    follower.followPath(grabSubPose1, true);
-                    setPathState(8);
+                    robot.Setup_Deposit_Claw(true);
+                    follower.followPath(grabSubPose1,true);
+                    sleepMethod(1.0);
+                    robot.TransferSample();
+                    sleepMethod(1.0);
+                    robot.Setup_Intake_Pose_RTP(false);
+                    robot.Intake(-1.0);
+                    robot.Setup_Horizontal_Lift(0.3);
+                    if(robot.HLL.getPosition() >= 0.9 || robot.HLR.getPosition() >= 0.9){
+                        setPathState(8);
+                    }
                 }
                 break;
             case 8:
                 if(!follower.isBusy()) {
-                    follower.followPath(scoreSubPose1, true);
-                    setPathState(9);
+                    sleepMethod(1.0);
+                    robot.Setup_Intake_Pose_RTP(true);
+                    robot.Setup_Horizontal_Lift(0.0);
+                    follower.followPath(scoreSubPose1,true);
+                    sleepMethod(1.0);
+                    robot.Intake(0);
+                    robot.Setup_Deposit_Claw(false);
+                    sleepMethod(1.0);
+                    robot.HighBasketScore();
+                    if(robot.VLL.getCurrentPosition() >= 745 || robot.VLR.getCurrentPosition() >= 745){
+                        robot.Setup_Deposit_Claw(true);
+                    }
+                    if(robot.DC.getPosition() >= 0.3) {
+                        setPathState(9);
+                    }
                 }
                 break;
             case 9:
                 if(!follower.isBusy()) {
-                    follower.followPath(grabSubPose2, true);
-                    setPathState(10);
+                    robot.Setup_Deposit_Claw(true);
+                    follower.followPath(grabSubPose2,true);
+                    sleepMethod(1.0);
+                    robot.TransferSample();
+                    sleepMethod(1.0);
+                    robot.Setup_Intake_Pose_RTP(false);
+                    robot.Intake(-1.0);
+                    robot.Setup_Horizontal_Lift(0.3);
+                    if(robot.HLL.getPosition() >= 0.9 || robot.HLR.getPosition() >= 0.9){
+                        setPathState(10);
+                    }
                 }
                 break;
             case 10:
                 if(!follower.isBusy()) {
-                    follower.followPath(scoreSubPose2, true);
-                    setPathState(11);
+                    sleepMethod(1.0);
+                    robot.Setup_Intake_Pose_RTP(true);
+                    robot.Setup_Horizontal_Lift(0.0);
+                    follower.followPath(scoreSubPose2,true);
+                    sleepMethod(1.0);
+                    robot.Intake(0);
+                    robot.Setup_Deposit_Claw(false);
+                    sleepMethod(1.0);
+                    robot.HighBasketScore();
+                    if(robot.VLL.getCurrentPosition() >= 745 || robot.VLR.getCurrentPosition() >= 745){
+                        robot.Setup_Deposit_Claw(true);
+                    }
+                    if(robot.DC.getPosition() >= 0.3) {
+                        setPathState(11);
+                    }
                 }
                 break;
             case 11:
@@ -450,5 +426,18 @@ public class Samples extends OpMode {
     @Override
     public void stop() {
         PoseStorage.CurrentPose = follower.getPose();
+    }
+
+    public void sleepMethod(double timeInSeconds) {
+        long temp = (long) (timeInSeconds * 1000);
+        try {
+            //Pause the current thread for x
+            Thread.sleep(temp);
+        } catch (InterruptedException e) {
+            // Handle the InterruptedException, which occurs if another thread interrupts this one
+            System.err.println("Thread interrupted during sleep: " + e.getMessage());
+            // Re-interrupt the current thread to indicate that it was interrupted
+            Thread.currentThread().interrupt();
+        }
     }
 }

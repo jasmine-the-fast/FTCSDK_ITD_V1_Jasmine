@@ -341,9 +341,12 @@ public class BTRobotV1 {
     }
 
     public void HighBasketScore(){
-        Setup_Deposit_Arm(0.6);
-        Setup_Deposit_Wrist(0.18);
-        Setup_Vertical_Lift(800, 1.0);
+        Setup_Intake_Pose_RTP(true);
+        Setup_Horizontal_Lift(0.0);
+        Setup_Deposit_Claw(false);
+        Setup_Deposit_Arm(0.5);
+        Setup_Deposit_Wrist(0.1);
+        Setup_Vertical_Lift(760, 1.0);
     }
 
     public void SpecimenGrab(){
@@ -355,8 +358,8 @@ public class BTRobotV1 {
 
     public void TransferSample(){
         Setup_Deposit_Claw(true);
-        Setup_Deposit_Arm(0.15);
-        Setup_Deposit_Wrist(0.3);
+        Setup_Deposit_Arm(0.13);
+        Setup_Deposit_Wrist(0.28);
         Setup_Vertical_Lift(0, 1.0);
     }
 }

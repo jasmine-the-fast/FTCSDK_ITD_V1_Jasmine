@@ -140,6 +140,7 @@ public class RobotCentricTeleOp extends LinearOpMode {
             }
 
             if(gamepad2.dpad_up){
+                robot.Setup_Deposit_Arm(0.5);
                 robot.HighBasketScore();
             } else if (gamepad2.dpad_left) {
                 robot.SpecimenGrab();
