@@ -340,17 +340,26 @@ public class BTRobotVBusy {
         Setup_Vertical_Lift(475, 1.0);
     }
 
-    public void HighBasketScore(){
-        Setup_Deposit_Arm(0.6);
-        Setup_Deposit_Wrist(0.18);
+    public void verticalSlideUp(){
         Setup_Vertical_Lift(800, 1.0);
     }
-    public void wristOut(){
-        Setup_Deposit_Arm(0.5);
+
+    public void readyToDropToBox(){
+        Setup_Deposit_Arm(0.6);
         Setup_Deposit_Wrist(0.18);
     }
+
+    public void dropAndReturn(){
+        Setup_Deposit_Claw(false);
+        wristBack();
+    }
+    public void wristOut(){
+        Setup_Deposit_Claw(true);
+        Setup_Deposit_Arm(0.5);
+        Setup_Deposit_Wrist(0.23);
+    }
     public void wristBack(){
-        Setup_Deposit_Arm(0.17);
+        Setup_Deposit_Arm(0.16);
         Setup_Deposit_Wrist(0.28);
     }
     public void SpecimenGrab(){
@@ -360,9 +369,9 @@ public class BTRobotVBusy {
         Setup_Vertical_Lift(80, 1.0);
     }
 
-    public void TransferSample(){
+    public void LowerSlides(){
         Setup_Deposit_Claw(true);
-        Setup_Deposit_Arm(0.17);
+        Setup_Deposit_Arm(0.16);
         Setup_Deposit_Wrist(0.28);
         Setup_Vertical_Lift(0, 1.0);
     }

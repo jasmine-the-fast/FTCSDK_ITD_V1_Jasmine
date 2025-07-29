@@ -172,12 +172,21 @@ public class SampleBusy extends OpMode {
         while (actionTimer.getElapsedTimeSeconds()<1){
             telemetry.addLine("wait for wrist out");
         }
-        robot.HighBasketScore();
+        robot.verticalSlideUp();
         while (actionTimer.getElapsedTimeSeconds()<3){
             telemetry.addLine("wait for v slide");
         }
-        robot.wristBack();
-        robot.TransferSample();
+
+        robot.readyToDropToBox();
+        while (actionTimer.getElapsedTimeSeconds()<4){
+            telemetry.addLine("wait for v slide");
+        }
+
+        robot.dropAndReturn();
+        while (actionTimer.getElapsedTimeSeconds()<4.5){
+            telemetry.addLine("wait for v slide");
+        }
+        robot.LowerSlides();
     }
     public void intakeOut(){
         //not timing it, because very likely it will be followed by a pedro moving
@@ -191,6 +200,7 @@ public class SampleBusy extends OpMode {
         robot.Setup_Horizontal_Lift(0.0);
         robot.Intake(0);
         robot.Setup_Deposit_Claw(false);
+        robot.wristBack();
     }
     public void autonomousPathUpdate() {
         switch (pathState) {
@@ -228,7 +238,7 @@ public class SampleBusy extends OpMode {
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
                     realState = 3;
                     timerScore();
-                    intakeOut();
+
                     follower.followPath(grabPickup2,true);
                     setPathState(4);
                 }
