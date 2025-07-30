@@ -44,7 +44,7 @@ public class Samples extends OpMode {
     private final Pose startPose = new Pose(9, 111, Math.toRadians(270));
 
     /** Scoring Pose of our robot. It is facing the submersible at a -45 degree (315 degree) angle. */
-    private final Pose scorePose = new Pose(12, 128, Math.toRadians(315));
+    private final Pose scorePose = new Pose(11,126, Math.toRadians(315));
 
     /** Lowest (First) Sample from the Spike Mark */
     private final Pose pickup1Pose = new Pose(20, 125, Math.toRadians(343));
@@ -192,37 +192,28 @@ public class Samples extends OpMode {
     public void autonomousPathUpdate() {
         telemetry.addData("autonomousPathUpdate - path state", pathState);
         switch (pathState) {
-            case 0:
+            case 0: //drives robot into position for basket of preloaded sample
                 robot.Setup_Horizontal_Lift(0.0);
                 robot.Setup_Deposit_Claw(false);
                 follower.followPath(scorePreload,true);
-                robot.Setup_Deposit_Arm(0.35);
-                sleepMethod(5);
                 setPathState(1);
                 telemetry.addData("autonomousPathUpdate - 1 path state", pathState);
                 break;
             case 1:
                 if(!follower.isBusy()) {
-                    //robot.Setup_Deposit_Arm(0.55);
-                    //sleepMethod(5);
-                    //robot.HighBasketScore();
-                    //Setup_Deposit_Arm(0.55);
-
                     robot.Setup_Vertical_Lift(760, 1.0);
-                    sleepMethod(5.0);
-                    robot.Setup_Deposit_Arm(0.50);
-                    sleepMethod(5.0);
-                    robot.Setup_Deposit_Wrist(0.1);
-                    sleepMethod(5.0);
+                    sleepMethod(2.0);
+                    robot.Setup_Deposit_Arm(0.55);
+                    sleepMethod(2.0);
+                    robot.Setup_Deposit_Wrist(0.13);
+                    sleepMethod(0.2);
                     robot.Setup_Deposit_Claw(true);
-                    sleepMethod(5.0);
-                    robot.Setup_Deposit_Arm(0.15);
-                    sleepMethod(1.0);
+                    sleepMethod(0.5);
                     robot.TransferSample();
                     sleepMethod(1.5);
                     follower.followPath(grabPickup1,true);
-                    robot.Setup_Deposit_Arm(0.15); //transfer sample also set this same position
-                    sleepMethod(5);
+                    //robot.Setup_Deposit_Arm(0.15); //TransferSample also set this same position, delete
+                    sleepMethod(2);
                     robot.Setup_Intake_Pose_RTP(false);
                     setPathState(2);
                 }

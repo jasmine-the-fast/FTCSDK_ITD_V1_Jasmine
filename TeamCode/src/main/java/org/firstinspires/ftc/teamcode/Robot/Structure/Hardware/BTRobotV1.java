@@ -342,7 +342,7 @@ public class BTRobotV1 {
 
     public void HighBasketScore(){
         Setup_Deposit_Arm(0.55);
-        Setup_Deposit_Wrist(0.1);
+        Setup_Deposit_Wrist(0.13);
         Setup_Vertical_Lift(760, 1.0);
     }
 
