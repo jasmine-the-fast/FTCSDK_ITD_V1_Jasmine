@@ -202,13 +202,10 @@ public class Samples extends OpMode {
             case 1:
                 if(!follower.isBusy()) {
                     robot.Setup_Vertical_Lift(760, 1.0);
-                    sleepMethod(2.0);
                     robot.Setup_Deposit_Arm(0.55);
-                    sleepMethod(2.0);
                     robot.Setup_Deposit_Wrist(0.13);
-                    sleepMethod(0.2);
                     robot.Setup_Deposit_Claw(true);
-                    sleepMethod(0.5);
+                    sleepMethod(10.0);
                     robot.TransferSample();
                     sleepMethod(1.5);
                     follower.followPath(grabPickup1,true);

@@ -166,27 +166,59 @@ public class SampleBusy extends OpMode {
     /** This switch is called continuously and runs the pathing, at certain points, it triggers the action state.
      * Everytime the switch changes case, it will reset the timer. (This is because of the setPathState() method)
      * The followPath() function sets the follower to run the specific path, but does NOT wait for it to finish before moving on. */
+
+    public void sleepMethod(double timeInSeconds) {
+        long temp = (long) (timeInSeconds * 1000);
+        try {
+            //Pause the current thread for x
+            Thread.sleep(temp);
+        } catch (InterruptedException e) {
+            // Handle the InterruptedException, which occurs if another thread interrupts this one
+            System.err.println("Thread interrupted during sleep: " + e.getMessage());
+            // Re-interrupt the current thread to indicate that it was interrupted
+            Thread.currentThread().interrupt();
+        }
+    }
     public void timerScore(){
-        actionTimer.resetTimer();
-        robot.wristOut();
-        while (actionTimer.getElapsedTimeSeconds()<1){
+
+        if (pathTimer.getElapsedTimeSeconds()<2){
+            robot.wristOut();
             telemetry.addLine("wait for wrist out");
         }
-        robot.verticalSlideUp();
-        while (actionTimer.getElapsedTimeSeconds()<3){
+
+        if (pathTimer.getElapsedTimeSeconds()>2 && pathTimer.getElapsedTimeSeconds()<3){
+            robot.verticalSlideUp();
             telemetry.addLine("wait for v slide");
         }
 
-        robot.readyToDropToBox();
-        while (actionTimer.getElapsedTimeSeconds()<4){
+
+        if (pathTimer.getElapsedTimeSeconds()>3 && pathTimer.getElapsedTimeSeconds()<4){
+            robot.readyToDropToBox();
             telemetry.addLine("wait for v slide");
         }
 
-        robot.dropAndReturn();
-        while (actionTimer.getElapsedTimeSeconds()<4.5){
+
+        if (pathTimer.getElapsedTimeSeconds()>4 && pathTimer.getElapsedTimeSeconds()<5){
+            robot.dropAndReturn();
             telemetry.addLine("wait for v slide");
         }
-        robot.LowerSlides();
+        if (pathTimer.getElapsedTimeSeconds()>6) {
+            robot.LowerSlides();
+        }
+    }
+    public void armTst(){
+        if (pathTimer.getElapsedTimeSeconds()<2){
+            robot.Setup_Deposit_Arm(0.4);
+        }
+        else if(pathTimer.getElapsedTimeSeconds()<4){
+            robot.Setup_Deposit_Arm(0.5);
+        }
+        else if(pathTimer.getElapsedTimeSeconds()<6){
+            robot.Setup_Deposit_Arm(0.6);
+        }
+        else if(pathTimer.getElapsedTimeSeconds()<8){
+            robot.verticalSlideUp();
+        }
     }
     public void intakeOut(){
         //not timing it, because very likely it will be followed by a pedro moving
@@ -209,23 +241,27 @@ public class SampleBusy extends OpMode {
                 telemetry.addLine("case0");
                 telemetry.update();
                 robot.Setup_Intake_Pose_RTP(true);
-                robot.wristOut();
+//                robot.wristOut();
                 follower.followPath(scorePreload);
                 setPathState(1);
                 break;
             case 1:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 2) {
+                if((!follower.isBusy()) && (pathTimer.getElapsedTimeSeconds() > 10)) {
                     realState = 1;
-                    timerScore();
-                    intakeOut();
+                    armTst();
+//                    timerScore();
+                    if(pathTimer.getElapsedTimeSeconds()>8){
+                        intakeOut();
+                    }
+
                     follower.followPath(grabPickup1,true);
                     setPathState(2);
                 }
                 break;
             case 2:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 12) {
                     realState = 2;
                     intakeBack();
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
@@ -235,7 +271,7 @@ public class SampleBusy extends OpMode {
                 break;
             case 3:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 10) {
                     realState = 3;
                     timerScore();
 
@@ -311,6 +347,7 @@ public class SampleBusy extends OpMode {
         // Feedback to Driver Hub
         telemetry.addData("path state", pathState);
         telemetry.addData("real state", realState);
+        telemetry.addData("time:",pathTimer.getElapsedTimeSeconds());
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());

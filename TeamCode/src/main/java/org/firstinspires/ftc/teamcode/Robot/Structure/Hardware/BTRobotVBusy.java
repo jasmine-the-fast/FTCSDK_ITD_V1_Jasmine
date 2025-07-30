@@ -38,7 +38,7 @@ public class BTRobotVBusy {
 
     public double DA_Rotation = 0;
     public double DA_Increment = 0.1;
-    final public double DA_MIN_Rotation = 0.0;
+    final public double DA_MIN_Rotation = 0.15;
     final public double DA_MAX_Rotation = 0.95;
 
     public String intakeColor;
@@ -294,8 +294,8 @@ public class BTRobotVBusy {
 
     public void Setup_Intake_Pose_RTP(boolean t) {
         if(t) {
-            IL.setPosition(0.4);
-            IR.setPosition(0.4);
+            IL.setPosition(0.5);
+            IR.setPosition(0.5);
         } else{
             IL.setPosition(0.0);
             IR.setPosition(0.0);
@@ -348,7 +348,11 @@ public class BTRobotVBusy {
         Setup_Deposit_Arm(0.6);
         Setup_Deposit_Wrist(0.18);
     }
-
+    public void HighBasketScore(){
+        Setup_Deposit_Arm(0.55);
+        Setup_Deposit_Wrist(0.1);
+        Setup_Vertical_Lift(760, 1.0);
+    }
     public void dropAndReturn(){
         Setup_Deposit_Claw(false);
         wristBack();
@@ -373,6 +377,11 @@ public class BTRobotVBusy {
         Setup_Deposit_Claw(true);
         Setup_Deposit_Arm(0.16);
         Setup_Deposit_Wrist(0.28);
+        Setup_Vertical_Lift(0, 1.0);
+    }
+    public void TransferSample(){
+        Setup_Deposit_Arm(0.15);
+        Setup_Deposit_Wrist(0.27);
         Setup_Vertical_Lift(0, 1.0);
     }
 }
