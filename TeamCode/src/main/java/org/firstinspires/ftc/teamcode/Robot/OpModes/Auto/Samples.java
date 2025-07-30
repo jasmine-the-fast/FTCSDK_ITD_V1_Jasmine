@@ -58,7 +58,7 @@ public class Samples extends OpMode {
     /** Park Pose for our robot, after we do all of the scoring. */
     private final Pose parkPose = new Pose(60, 98, Math.toRadians(90));
     /**Intake from Submersible */
-    private final Pose pickupSubPose = new Pose(65, 95, Math.toRadians(270));
+    private final Pose pickupSubPose = new Pose(75, 100, Math.toRadians(270));
 
     /** Used as the control point for the BeizerCurve for SubPose*/
     private final Pose pickupSubControlPose = new Pose(55, 130, Math.toRadians(270));
@@ -193,20 +193,21 @@ public class Samples extends OpMode {
         telemetry.addData("autonomousPathUpdate - path state", pathState);
         switch (pathState) {
             case 0:
-                robot.Setup_Intake_Pose_RTP(true);
                 robot.Setup_Horizontal_Lift(0.0);
                 robot.Setup_Deposit_Claw(false);
                 follower.followPath(scorePreload,true);
-                robot.Setup_Deposit_Arm(0.45);
+                robot.Setup_Deposit_Arm(0.55);
                 setPathState(1);
                 telemetry.addData("autonomousPathUpdate - 1 path state", pathState);
                 break;
             case 1:
                 if(!follower.isBusy()) {
-                    robot.Setup_Deposit_Arm(0.55);
-                    sleepMethod(1.5);
+                    actionTimer.resetTimer();
+                    while (actionTimer.getElapsedTimeSeconds()<5){
+                        robot.Setup_Deposit_Arm(0.55);
+                    }
+                    sleepMethod(0.1);
                     robot.HighBasketScore();
-                    sleepMethod(1.0);
                     robot.Setup_Deposit_Claw(true);
                     robot.Setup_Deposit_Arm(0.15);
                     sleepMethod(1.5);
@@ -228,19 +229,22 @@ public class Samples extends OpMode {
                     robot.Setup_Horizontal_Lift(0.0);
                     robot.TransferSample();
                     sleepMethod(1.0);
+                    robot.Intake(0.0);
                     robot.Setup_Deposit_Claw(false);
                     follower.followPath(scorePickup1,true);
-                    robot.Setup_Deposit_Arm(0.45);
+                    robot.Setup_Deposit_Arm(0.55);
                     setPathState(3);
                 }
                 break;
             case 3:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
-                    robot.Setup_Deposit_Arm(0.55);
-                    sleepMethod(1.5);
+                    actionTimer.resetTimer();
+                    while (actionTimer.getElapsedTimeSeconds()<4){
+                        robot.Setup_Deposit_Arm(0.55);
+                    }
+                    sleepMethod(0.1);
                     robot.HighBasketScore();
-                    sleepMethod(1.0);
                     robot.Setup_Deposit_Claw(true);
                     robot.Setup_Deposit_Arm(0.15);
                     sleepMethod(1.5);
@@ -263,19 +267,22 @@ public class Samples extends OpMode {
                     robot.Setup_Horizontal_Lift(0.0);
                     robot.TransferSample();
                     sleepMethod(1.0);
+                    robot.Intake(0.0);
                     robot.Setup_Deposit_Claw(false);
                     follower.followPath(scorePickup2,true);
-                    robot.Setup_Deposit_Arm(0.45);
+                    robot.Setup_Deposit_Arm(0.55);
                     setPathState(5);
                 }
                 break;
             case 5:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
-                    robot.Setup_Deposit_Arm(0.55);
-                    sleepMethod(1.5);
+                    actionTimer.resetTimer();
+                    while (actionTimer.getElapsedTimeSeconds()<4){
+                        robot.Setup_Deposit_Arm(0.55);
+                    }
+                    sleepMethod(0.1);
                     robot.HighBasketScore();
-                    sleepMethod(1.0);
                     robot.Setup_Deposit_Claw(true);
                     robot.Setup_Deposit_Arm(0.15);
                     sleepMethod(1.5);
@@ -298,42 +305,94 @@ public class Samples extends OpMode {
                     robot.Setup_Horizontal_Lift(0.0);
                     robot.TransferSample();
                     sleepMethod(1.0);
+                    robot.Intake(0.0);
                     robot.Setup_Deposit_Claw(false);
                     follower.followPath(scorePickup3,true);
-                    sleepMethod(0.5);
-                    robot.Setup_Deposit_Arm(0.45);
-                    sleepMethod(1.0);
-                    robot.HighBasketScore();
-                    sleepMethod(0.1);
+                    robot.Setup_Deposit_Arm(0.55);
                     setPathState(7);
                 }
                 break;
             case 7:
                 if(!follower.isBusy()) {
+                    actionTimer.resetTimer();
+                    while (actionTimer.getElapsedTimeSeconds()<4){
+                        robot.Setup_Deposit_Arm(0.55);
+                    }
+                    sleepMethod(0.1);
+                    robot.HighBasketScore();
+                    robot.Setup_Deposit_Claw(true);
+                    robot.Setup_Deposit_Arm(0.15);
+                    sleepMethod(1.5);
+                    robot.TransferSample();
+                    sleepMethod(1.5);
                     follower.followPath(grabSubPose1, true);
+                    robot.Setup_Deposit_Arm(0.15);
+                    robot.Setup_Intake_Pose_RTP(false);
+                    sleepMethod(0.3);
                     setPathState(8);
                 }
                 break;
             case 8:
                 if(!follower.isBusy()) {
+                    robot.Intake(-1.0);
+                    robot.Setup_Horizontal_Lift(0.3);
+                    sleepMethod(0.3);
+                    robot.Setup_Intake_Pose_RTP(true);
+                    robot.Setup_Horizontal_Lift(0.0);
+                    robot.TransferSample();
+                    sleepMethod(1.0);
+                    robot.Intake(0.0);
+                    robot.Setup_Deposit_Claw(false);
                     follower.followPath(scoreSubPose1, true);
+                    robot.Setup_Deposit_Arm(0.55);
                     setPathState(9);
                 }
                 break;
             case 9:
                 if(!follower.isBusy()) {
+                    actionTimer.resetTimer();
+                    while (actionTimer.getElapsedTimeSeconds()<4){
+                        robot.Setup_Deposit_Arm(0.55);
+                    }
+                    sleepMethod(0.1);
+                    robot.HighBasketScore();
+                    robot.Setup_Deposit_Claw(true);
+                    robot.Setup_Deposit_Arm(0.15);
+                    sleepMethod(1.5);
+                    robot.TransferSample();
+                    sleepMethod(1.5);
                     follower.followPath(grabSubPose2, true);
+                    robot.Setup_Deposit_Arm(0.15);
+                    robot.Setup_Intake_Pose_RTP(false);
+                    sleepMethod(0.3);
                     setPathState(10);
                 }
                 break;
             case 10:
                 if(!follower.isBusy()) {
+                    robot.Intake(-1.0);
+                    robot.Setup_Horizontal_Lift(0.5);
+                    sleepMethod(0.3);
+                    robot.Setup_Intake_Pose_RTP(true);
+                    robot.Setup_Horizontal_Lift(0.0);
+                    robot.TransferSample();
+                    sleepMethod(1.0);
+                    robot.Intake(0.0);
+                    robot.Setup_Deposit_Claw(false);
                     follower.followPath(scoreSubPose2, true);
+                    robot.Setup_Deposit_Arm(0.55);
                     setPathState(11);
                 }
                 break;
             case 11:
                 if(!follower.isBusy()) {
+                    actionTimer.resetTimer();
+                    while (actionTimer.getElapsedTimeSeconds()<4){
+                        robot.Setup_Deposit_Arm(0.55);
+                    }
+                    sleepMethod(0.1);
+                    robot.HighBasketScore();
+                    robot.Setup_Vertical_Lift(0, 1.0);
                     follower.followPath(park,true);
                     setPathState(12);
                 }
@@ -385,6 +444,7 @@ public class Samples extends OpMode {
         robot.colorSensor.enableLed(true);
         robot.getColor();
         Color_Alliance = "Blue";
+        robot.Setup_Intake_Pose_RTP(true);
     }
 
     /** This method is called continuously after Init while waiting for "play". **/
