@@ -204,10 +204,8 @@ public class Samples extends OpMode {
                 if(!follower.isBusy()) {
                     actionTimer.resetTimer();
                     while (actionTimer.getElapsedTimeSeconds()<5){
-                        robot.Setup_Deposit_Arm(0.55);
+                        robot.HighBasketScore();
                     }
-                    sleepMethod(0.1);
-                    robot.HighBasketScore();
                     robot.Setup_Deposit_Claw(true);
                     robot.Setup_Deposit_Arm(0.15);
                     sleepMethod(1.5);
@@ -240,11 +238,9 @@ public class Samples extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
                     actionTimer.resetTimer();
-                    while (actionTimer.getElapsedTimeSeconds()<4){
-                        robot.Setup_Deposit_Arm(0.55);
+                    while (actionTimer.getElapsedTimeSeconds()<5){
+                        robot.HighBasketScore();
                     }
-                    sleepMethod(0.1);
-                    robot.HighBasketScore();
                     robot.Setup_Deposit_Claw(true);
                     robot.Setup_Deposit_Arm(0.15);
                     sleepMethod(1.5);
@@ -278,11 +274,9 @@ public class Samples extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
                     actionTimer.resetTimer();
-                    while (actionTimer.getElapsedTimeSeconds()<4){
-                        robot.Setup_Deposit_Arm(0.55);
+                    while (actionTimer.getElapsedTimeSeconds()<5){
+                        robot.HighBasketScore();
                     }
-                    sleepMethod(0.1);
-                    robot.HighBasketScore();
                     robot.Setup_Deposit_Claw(true);
                     robot.Setup_Deposit_Arm(0.15);
                     sleepMethod(1.5);
@@ -315,11 +309,9 @@ public class Samples extends OpMode {
             case 7:
                 if(!follower.isBusy()) {
                     actionTimer.resetTimer();
-                    while (actionTimer.getElapsedTimeSeconds()<4){
-                        robot.Setup_Deposit_Arm(0.55);
+                    while (actionTimer.getElapsedTimeSeconds()<5){
+                        robot.HighBasketScore();
                     }
-                    sleepMethod(0.1);
-                    robot.HighBasketScore();
                     robot.Setup_Deposit_Claw(true);
                     robot.Setup_Deposit_Arm(0.15);
                     sleepMethod(1.5);
@@ -351,11 +343,9 @@ public class Samples extends OpMode {
             case 9:
                 if(!follower.isBusy()) {
                     actionTimer.resetTimer();
-                    while (actionTimer.getElapsedTimeSeconds()<4){
-                        robot.Setup_Deposit_Arm(0.55);
+                    while (actionTimer.getElapsedTimeSeconds()<5){
+                        robot.HighBasketScore();
                     }
-                    sleepMethod(0.1);
-                    robot.HighBasketScore();
                     robot.Setup_Deposit_Claw(true);
                     robot.Setup_Deposit_Arm(0.15);
                     sleepMethod(1.5);
@@ -387,11 +377,11 @@ public class Samples extends OpMode {
             case 11:
                 if(!follower.isBusy()) {
                     actionTimer.resetTimer();
-                    while (actionTimer.getElapsedTimeSeconds()<4){
-                        robot.Setup_Deposit_Arm(0.55);
+                    while (actionTimer.getElapsedTimeSeconds()<5){
+                        robot.HighBasketScore();
                     }
                     sleepMethod(0.1);
-                    robot.HighBasketScore();
+                    robot.Setup_Deposit_Claw(true);
                     robot.Setup_Vertical_Lift(0, 1.0);
                     follower.followPath(park,true);
                     setPathState(12);
