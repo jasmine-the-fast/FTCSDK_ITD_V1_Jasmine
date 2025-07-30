@@ -193,27 +193,36 @@ public class Samples extends OpMode {
         telemetry.addData("autonomousPathUpdate - path state", pathState);
         switch (pathState) {
             case 0:
-                robot.Setup_Intake_Pose_RTP(true);
                 robot.Setup_Horizontal_Lift(0.0);
                 robot.Setup_Deposit_Claw(false);
                 follower.followPath(scorePreload,true);
-                robot.Setup_Deposit_Arm(0.45);
+                robot.Setup_Deposit_Arm(0.35);
+                sleepMethod(5);
                 setPathState(1);
                 telemetry.addData("autonomousPathUpdate - 1 path state", pathState);
                 break;
             case 1:
                 if(!follower.isBusy()) {
-                    robot.Setup_Deposit_Arm(0.55);
-                    sleepMethod(1.5);
-                    robot.HighBasketScore();
-                    sleepMethod(1.0);
+                    //robot.Setup_Deposit_Arm(0.55);
+                    //sleepMethod(5);
+                    //robot.HighBasketScore();
+                    //Setup_Deposit_Arm(0.55);
+
+                    robot.Setup_Vertical_Lift(760, 1.0);
+                    sleepMethod(5.0);
+                    robot.Setup_Deposit_Arm(0.50);
+                    sleepMethod(5.0);
+                    robot.Setup_Deposit_Wrist(0.1);
+                    sleepMethod(5.0);
                     robot.Setup_Deposit_Claw(true);
+                    sleepMethod(5.0);
                     robot.Setup_Deposit_Arm(0.15);
-                    sleepMethod(1.5);
+                    sleepMethod(1.0);
                     robot.TransferSample();
                     sleepMethod(1.5);
                     follower.followPath(grabPickup1,true);
-                    robot.Setup_Deposit_Arm(0.15);
+                    robot.Setup_Deposit_Arm(0.15); //transfer sample also set this same position
+                    sleepMethod(5);
                     robot.Setup_Intake_Pose_RTP(false);
                     setPathState(2);
                 }
@@ -231,6 +240,7 @@ public class Samples extends OpMode {
                     robot.Setup_Deposit_Claw(false);
                     follower.followPath(scorePickup1,true);
                     robot.Setup_Deposit_Arm(0.45);
+                    sleepMethod(5);
                     setPathState(3);
                 }
                 break;
@@ -238,7 +248,7 @@ public class Samples extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
                     robot.Setup_Deposit_Arm(0.55);
-                    sleepMethod(1.5);
+                    sleepMethod(5);
                     robot.HighBasketScore();
                     sleepMethod(1.0);
                     robot.Setup_Deposit_Claw(true);
@@ -248,6 +258,7 @@ public class Samples extends OpMode {
                     sleepMethod(1.5);
                     follower.followPath(grabPickup2,true);
                     robot.Setup_Deposit_Arm(0.15);
+                    sleepMethod(5);
                     robot.Setup_Intake_Pose_RTP(false);
                     sleepMethod(0.3);
                     setPathState(4);
