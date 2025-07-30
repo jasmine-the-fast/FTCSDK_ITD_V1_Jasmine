@@ -179,6 +179,14 @@ public class SampleBusy extends OpMode {
             Thread.currentThread().interrupt();
         }
     }
+    public void highScore(){
+        robot.verticalSlideUp();
+        if (pathTimer.getElapsedTimeSeconds()<2){
+
+        }
+
+
+    }
     public void timerScore(){
 
         if (pathTimer.getElapsedTimeSeconds()<2){
@@ -186,23 +194,23 @@ public class SampleBusy extends OpMode {
             telemetry.addLine("wait for wrist out");
         }
 
-        if (pathTimer.getElapsedTimeSeconds()>2 && pathTimer.getElapsedTimeSeconds()<3){
+        else if (pathTimer.getElapsedTimeSeconds()<3){
             robot.verticalSlideUp();
             telemetry.addLine("wait for v slide");
         }
 
 
-        if (pathTimer.getElapsedTimeSeconds()>3 && pathTimer.getElapsedTimeSeconds()<4){
+        else if (pathTimer.getElapsedTimeSeconds()<4){
             robot.readyToDropToBox();
             telemetry.addLine("wait for v slide");
         }
 
 
-        if (pathTimer.getElapsedTimeSeconds()>4 && pathTimer.getElapsedTimeSeconds()<5){
+        else if (pathTimer.getElapsedTimeSeconds()<5){
             robot.dropAndReturn();
             telemetry.addLine("wait for v slide");
         }
-        if (pathTimer.getElapsedTimeSeconds()>6) {
+        else if (pathTimer.getElapsedTimeSeconds()>6) {
             robot.LowerSlides();
         }
     }
@@ -247,21 +255,24 @@ public class SampleBusy extends OpMode {
                 break;
             case 1:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if((!follower.isBusy()) && (pathTimer.getElapsedTimeSeconds() > 10)) {
+                if(!follower.isBusy()) {
                     realState = 1;
-                    armTst();
+                    timerScore();
 //                    timerScore();
                     if(pathTimer.getElapsedTimeSeconds()>8){
                         intakeOut();
+                        follower.followPath(grabPickup1,true);
+                        setPathState(2);
                     }
 
-                    follower.followPath(grabPickup1,true);
-                    setPathState(2);
+
+
+
                 }
                 break;
             case 2:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 12) {
+                if(!follower.isBusy() ) {
                     realState = 2;
                     intakeBack();
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
