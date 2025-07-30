@@ -181,13 +181,21 @@ public class Samples extends OpMode {
             telemetry.addLine("wait for wrist out");
         }
     }
-    public void timeWristIn() {
+    public void basketScore() {
         actionTimer.resetTimer();
         robot.Setup_Deposit_Arm(0.13);
         robot.Setup_Deposit_Wrist(0.28);
+        robot.Setup_Vertical_Lift(760,1.0);
         while (actionTimer.getElapsedTimeSeconds() < 5) {
             telemetry.addLine("wait for wrist in");
         }
+    }
+    public void intakeOut(){
+        //not timing it, because very likely it will be followed by a pedro moving
+        robot.Intake(-1.0);
+        robot.Setup_Intake_Pose_RTP(false);
+//                    robot.Horizontal_Lift(true);a
+        robot.Setup_Horizontal_Lift(1.0);
     }
     public void autonomousPathUpdate() {
         telemetry.addData("autonomousPathUpdate - path state", pathState);
@@ -195,41 +203,36 @@ public class Samples extends OpMode {
             case 0: //drives robot into position for basket of preloaded sample
                 robot.Setup_Horizontal_Lift(0.0);
                 robot.Setup_Deposit_Claw(false);
-                follower.followPath(scorePreload,true);
-                setPathState(1);
-                telemetry.addData("autonomousPathUpdate - 1 path state", pathState);
+                robot.HighBasketScore();
+                if(pathTimer.getElapsedTime()>5){
+                    follower.followPath(scorePreload,true);
+                    setPathState(1);
+                    telemetry.addData("autonomousPathUpdate - 1 path state", pathState);
+                }
+
                 break;
             case 1:
                 if(!follower.isBusy()) {
-                    robot.Setup_Vertical_Lift(760, 1.0);
-                    robot.Setup_Deposit_Arm(0.55);
-                    robot.Setup_Deposit_Wrist(0.13);
+
                     robot.Setup_Deposit_Claw(true);
                     sleepMethod(10.0);
                     robot.TransferSample();
                     sleepMethod(1.5);
                     follower.followPath(grabPickup1,true);
                     //robot.Setup_Deposit_Arm(0.15); //TransferSample also set this same position, delete
-                    sleepMethod(2);
-                    robot.Setup_Intake_Pose_RTP(false);
+
                     setPathState(2);
                 }
                 break;
             case 2:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy()) {
-                    robot.Intake(-1.0);
-                    robot.Setup_Horizontal_Lift(1.0);
-                    sleepMethod(0.3);
-                    robot.Setup_Intake_Pose_RTP(true);
-                    robot.Setup_Horizontal_Lift(0.0);
-                    robot.TransferSample();
-                    sleepMethod(1.0);
-                    robot.Setup_Deposit_Claw(false);
-                    follower.followPath(scorePickup1,true);
-                    robot.Setup_Deposit_Arm(0.45);
-                    sleepMethod(5);
-                    setPathState(3);
+                    intakeOut();
+                    if(robot.HLL.getPosition()>0.9){
+                        follower.followPath(scorePickup1,true);
+                        setPathState(3);
+                    }
+
                 }
                 break;
             case 3:

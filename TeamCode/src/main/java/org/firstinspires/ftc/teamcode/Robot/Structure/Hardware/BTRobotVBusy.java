@@ -33,8 +33,8 @@ public class BTRobotVBusy {
 
     public double DW_Rotation = 0.1;
     public double DW_Increment = 0.01;
-    final public double DW_MIN_Rotation = 0.1;
-    final public double DW_MAX_Rotation = 0.31;
+    final public double DW_MIN_Rotation = 0.63;
+    final public double DW_MAX_Rotation = 1;
 
     public double DA_Rotation = 0;
     public double DA_Increment = 0.1;
@@ -294,8 +294,8 @@ public class BTRobotVBusy {
 
     public void Setup_Intake_Pose_RTP(boolean t) {
         if(t) {
-            IL.setPosition(0.5);
-            IR.setPosition(0.5);
+            IL.setPosition(0.45);
+            IR.setPosition(0.45);
         } else{
             IL.setPosition(0.0);
             IR.setPosition(0.0);
@@ -336,7 +336,7 @@ public class BTRobotVBusy {
     public void SpecimenScore(){
         Setup_Deposit_Claw(false);
         Setup_Deposit_Arm(0.22);
-        Setup_Deposit_Wrist(0.34);
+        Setup_Deposit_Wrist(0.9);
         Setup_Vertical_Lift(475, 1.0);
     }
 
@@ -346,42 +346,32 @@ public class BTRobotVBusy {
 
     public void readyToDropToBox(){
         Setup_Deposit_Arm(0.6);
-        Setup_Deposit_Wrist(0.18);
+        Setup_Deposit_Wrist(DW_MIN_Rotation);
     }
     public void HighBasketScore(){
         Setup_Deposit_Arm(0.55);
-        Setup_Deposit_Wrist(0.1);
+        Setup_Deposit_Wrist(DW_MAX_Rotation);
         Setup_Vertical_Lift(760, 1.0);
     }
-    public void dropAndReturn(){
-        Setup_Deposit_Claw(false);
-        wristBack();
-    }
-    public void wristOut(){
-        Setup_Deposit_Claw(true);
-        Setup_Deposit_Arm(0.5);
-        Setup_Deposit_Wrist(0.23);
-    }
-    public void wristBack(){
-        Setup_Deposit_Arm(0.14);
-        Setup_Deposit_Wrist(0.28);
-    }
+
+
+
     public void SpecimenGrab(){
         Setup_Deposit_Claw(true);
         Setup_Deposit_Arm(0.95);
-        Setup_Deposit_Wrist(0.285);
+        Setup_Deposit_Wrist(DW_MAX_Rotation);
         Setup_Vertical_Lift(80, 1.0);
     }
 
     public void LowerSlides(){
         Setup_Deposit_Claw(true);
         Setup_Deposit_Arm(0.14);
-        Setup_Deposit_Wrist(0.28);
+        Setup_Deposit_Wrist(DW_MIN_Rotation);
         Setup_Vertical_Lift(0, 1.0);
     }
     public void TransferSample(){
         Setup_Deposit_Arm(0.15);
-        Setup_Deposit_Wrist(0.27);
+        Setup_Deposit_Wrist(DW_MIN_Rotation);
         Setup_Vertical_Lift(0, 1.0);
     }
 }
