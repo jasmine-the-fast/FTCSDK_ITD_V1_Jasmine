@@ -363,7 +363,7 @@ public class BTRobotVBusy {
         Setup_Deposit_Wrist(0.23);
     }
     public void wristBack(){
-        Setup_Deposit_Arm(0.16);
+        Setup_Deposit_Arm(0.14);
         Setup_Deposit_Wrist(0.28);
     }
     public void SpecimenGrab(){
@@ -375,7 +375,7 @@ public class BTRobotVBusy {
 
     public void LowerSlides(){
         Setup_Deposit_Claw(true);
-        Setup_Deposit_Arm(0.16);
+        Setup_Deposit_Arm(0.14);
         Setup_Deposit_Wrist(0.28);
         Setup_Vertical_Lift(0, 1.0);
     }
