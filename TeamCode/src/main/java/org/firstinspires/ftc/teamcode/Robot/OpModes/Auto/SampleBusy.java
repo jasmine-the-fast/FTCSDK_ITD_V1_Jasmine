@@ -181,20 +181,19 @@ public class SampleBusy extends OpMode {
     }
     public void highScore(){
         robot.verticalSlideUp();
-        if (pathTimer.getElapsedTimeSeconds()<2){
-`           robot.Setup_Deposit_Claw(true);
+        if (pathTimer.getElapsedTimeSeconds()<1){
+            robot.Setup_Deposit_Claw(false);
             robot.Setup_Deposit_Arm(0.55);
             robot.Setup_Deposit_Wrist(0.13);
         }
-        else if (pathTimer.getElapsedTimeSeconds()<2.5){
-            robot.Setup_Deposit_Claw(false);
+        else if (pathTimer.getElapsedTimeSeconds()<1.1){
+            robot.Setup_Deposit_Claw(true);
         }
-        else if (pathTimer.getElapsedTimeSeconds()<3.5){
-            robot.Setup_Deposit_Claw(false);
+        else if (pathTimer.getElapsedTimeSeconds()<1.6){
             robot.Setup_Deposit_Arm(0.15);
             robot.Setup_Deposit_Wrist(0.27);
         }
-        else if (pathTimer.getElapsedTimeSeconds()<4.5){
+        else if (pathTimer.getElapsedTimeSeconds()<2){
             robot.TransferSample();
         }
     }
@@ -270,7 +269,7 @@ public class SampleBusy extends OpMode {
                     realState = 1;
                     highScore();
 //                    timerScore();
-                    if(pathTimer.getElapsedTimeSeconds()>5){
+                    if(pathTimer.getElapsedTimeSeconds()>2){
                         intakeOut();
                         follower.followPath(grabPickup1,true);
                         setPathState(2);
