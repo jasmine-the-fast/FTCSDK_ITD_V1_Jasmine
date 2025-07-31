@@ -180,13 +180,8 @@ public class Samples extends OpMode {
         }
     }
     public void highScore(){
-        if (pathTimer.getElapsedTimeSeconds()<0.2) {
-            robot.Setup_Deposit_Claw(false);
-        }
-        else if (pathTimer.getElapsedTimeSeconds()<0.3){
-            robot.verticalSlideUp();
-        }
-        else if (pathTimer.getElapsedTimeSeconds()<1.8){
+        robot.verticalSlideUp();
+        if (pathTimer.getElapsedTimeSeconds()<1.8){
             robot.Setup_Deposit_Claw(false);
             robot.Setup_Deposit_Arm(0.60);
             robot.Deposit_Wrist(true);
@@ -203,24 +198,27 @@ public class Samples extends OpMode {
             intakeBack();
         }
     }
-    public void scoreWithTransfer(){
-        if (pathTimer.getElapsedTimeSeconds()<0.1) {
-            robot.Setup_Deposit_Claw(false);
-        }
-        if (pathTimer.getElapsedTimeSeconds()<1.8){
-            robot.verticalSlideUp();
+    public void raiseArm(){
+        robot.Setup_Deposit_Arm(0.60);
+    }
+    public void closeClaw(){
+        robot.Setup_Deposit_Claw(false);
+    }
+    public void highScoreWithDelay(double delay){
+         if (pathTimer.getElapsedTimeSeconds()<1.8+delay){
             robot.Setup_Deposit_Claw(false);
             robot.Setup_Deposit_Arm(0.60);
             robot.Deposit_Wrist(true);
+            robot.verticalSlideUp();
         }
-        else if (pathTimer.getElapsedTimeSeconds()<1.9){
+        else if (pathTimer.getElapsedTimeSeconds()<1.9+delay){
             robot.Setup_Deposit_Claw(true);
         }
-        else if (pathTimer.getElapsedTimeSeconds()<2.3){
+        else if (pathTimer.getElapsedTimeSeconds()<2.3+delay){
             robot.Setup_Deposit_Arm(0.15);
             robot.Deposit_Wrist(false);
         }
-        else if (pathTimer.getElapsedTimeSeconds()<3.1){
+        else if (pathTimer.getElapsedTimeSeconds()<3.1+delay){
             robot.TransferSample();
             intakeBack();
         }
@@ -255,7 +253,7 @@ public class Samples extends OpMode {
                 if(!follower.isBusy()) {
                     realState = 1;
 //                    intakeBack();
-                    highScore();
+                    highScoreWithDelay(0.0);
                     if(pathTimer.getElapsedTimeSeconds()>3.6){
                         intakeOut();
                         follower.followPath(grabPickup1,true);
@@ -272,59 +270,100 @@ public class Samples extends OpMode {
                     if(pathTimer.getElapsedTimeSeconds()>1.2){
                         robot.Intake(0);
                         follower.followPath(scorePickup1,true);
+                        setPathState(301);
+                    }
+                }
+                break;
+            case 301:
+                if(pathTimer.getElapsedTimeSeconds()>0.2) {
+//                    robot.Setup_Deposit_Claw(false);
+                    raiseArm();
+                    realState = 301;
+                    if (pathTimer.getElapsedTimeSeconds()>0.8){
                         setPathState(3);
                     }
-
                 }
                 break;
             case 3:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
                     realState = 3;
-                    highScore();
-                    if(pathTimer.getElapsedTimeSeconds()>5){
+                    highScoreWithDelay(0.0);
+                    if(pathTimer.getElapsedTimeSeconds()>3.6){
                         follower.followPath(grabPickup2,true);
                         intakeOut();
                         setPathState(4);
                     }
-
                 }
                 break;
             case 4:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup2Pose's position */
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
-                    realState = 4;
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
+                if(!follower.isBusy() &&  pathTimer.getElapsedTimeSeconds()>0.5) {
+                    realState = 401;
                     intakeBack();
-                    follower.followPath(scorePickup2,true);
-                    setPathState(5);
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                    if(pathTimer.getElapsedTimeSeconds()>1.2){
+                        robot.Intake(0);
+                        follower.followPath(scorePickup2,true);
+                        setPathState(501);
+                    }
+                }
+                break;
+            case 501:
+                if(pathTimer.getElapsedTimeSeconds()>0.2) {
+//                    robot.Setup_Deposit_Claw(false);
+                    raiseArm();
+                    realState = 501;
+                    if (pathTimer.getElapsedTimeSeconds()>0.8){
+                        setPathState(5);
+                    }
                 }
                 break;
             case 5:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
-                    realState = 5;
-                    highScore();
-                    intakeOut();
-                    follower.followPath(grabPickup3,true);
-                    setPathState(6);
+                if(!follower.isBusy()) {
+                    realState = 3;
+                    highScoreWithDelay(0.0);
+                    if(pathTimer.getElapsedTimeSeconds()>3.6){
+                        follower.followPath(grabPickup3,true);
+                        intakeOut();
+                        setPathState(6);
+                    }
                 }
                 break;
             case 6:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
-                    realState = 6;
+                if(!follower.isBusy() &&  pathTimer.getElapsedTimeSeconds()>0.5) {
+                    realState = 401;
                     intakeBack();
-                    follower.followPath(scorePickup3, true);
-                    setPathState(7);
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                    if(pathTimer.getElapsedTimeSeconds()>1.2){
+                        robot.Intake(0);
+                        follower.followPath(scorePickup3,true);
+                        setPathState(701);
+                    }
+                }
+                break;
+            case 701:
+                if(pathTimer.getElapsedTimeSeconds()>0.2) {
+//                    robot.Setup_Deposit_Claw(false);
+                    raiseArm();
+                    realState = 501;
+                    if (pathTimer.getElapsedTimeSeconds()>0.8){
+                        setPathState(7);
+                    }
                 }
                 break;
             case 7:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
-                    realState = 7;
-                    highScore();
-                    follower.followPath(park,true);
-                    setPathState(8);
+                if(!follower.isBusy()) {
+                    realState = 3;
+                    highScoreWithDelay(0.0);
+                    if(pathTimer.getElapsedTimeSeconds()>3.6){
+                        follower.followPath(park,true);
+                        intakeOut();
+                        setPathState(8);
+                    }
                 }
                 break;
             case 8:
