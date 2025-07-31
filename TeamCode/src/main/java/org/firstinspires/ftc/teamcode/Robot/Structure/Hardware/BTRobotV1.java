@@ -358,6 +358,6 @@ public class BTRobotV1 {
     public void TransferSample(){
         Setup_Deposit_Arm(0.15);
         Setup_Deposit_Wrist(0.63);
-        Setup_Vertical_Lift(0, 1.0);
+        Setup_Vertical_Lift(0, 0.7);
     }
 }

@@ -48,7 +48,7 @@ public class SampleBusy extends OpMode {
     private final Pose scorePose = new Pose(14, 126, Math.toRadians(315));
 
     /** Lowest (First) Sample from the Spike Mark */
-    private final Pose pickup1Pose = new Pose(18, 125, Math.toRadians(340));
+    private final Pose pickup1Pose = new Pose(18, 125, Math.toRadians(350));
 
     /** Middle (Second) Sample from the Spike Mark */
     private final Pose pickup2Pose = new Pose(18, 130, Math.toRadians(0));
@@ -180,20 +180,45 @@ public class SampleBusy extends OpMode {
         }
     }
     public void highScore(){
-        if (pathTimer.getElapsedTimeSeconds()<1.7){
+        if (pathTimer.getElapsedTimeSeconds()<0.1) {
+            robot.Setup_Deposit_Claw(false);
+        }
+        else if (pathTimer.getElapsedTimeSeconds()<1.8){
             robot.verticalSlideUp();
             robot.Setup_Deposit_Claw(false);
             robot.Setup_Deposit_Arm(0.60);
             robot.Deposit_Wrist(true);
         }
-        else if (pathTimer.getElapsedTimeSeconds()<1.8){
+        else if (pathTimer.getElapsedTimeSeconds()<1.9){
             robot.Setup_Deposit_Claw(true);
         }
-        else if (pathTimer.getElapsedTimeSeconds()<2.2){
+        else if (pathTimer.getElapsedTimeSeconds()<2.3){
             robot.Setup_Deposit_Arm(0.15);
             robot.Deposit_Wrist(false);
         }
-        else if (pathTimer.getElapsedTimeSeconds()<3){
+        else if (pathTimer.getElapsedTimeSeconds()<3.1){
+            robot.TransferSample();
+            intakeBack();
+        }
+    }
+    public void scoreWithTransfer(){
+        if (pathTimer.getElapsedTimeSeconds()<0.1) {
+            robot.Setup_Deposit_Claw(false);
+        }
+        if (pathTimer.getElapsedTimeSeconds()<1.8){
+            robot.verticalSlideUp();
+            robot.Setup_Deposit_Claw(false);
+            robot.Setup_Deposit_Arm(0.60);
+            robot.Deposit_Wrist(true);
+        }
+        else if (pathTimer.getElapsedTimeSeconds()<1.9){
+            robot.Setup_Deposit_Claw(true);
+        }
+        else if (pathTimer.getElapsedTimeSeconds()<2.3){
+            robot.Setup_Deposit_Arm(0.15);
+            robot.Deposit_Wrist(false);
+        }
+        else if (pathTimer.getElapsedTimeSeconds()<3.1){
             robot.TransferSample();
             intakeBack();
         }
@@ -210,7 +235,7 @@ public class SampleBusy extends OpMode {
     public void intakeBack(){
         robot.Setup_Intake_Pose_RTP(true);
         robot.Setup_Horizontal_Lift(0.0);
-        robot.Intake(0);
+//        robot.Intake(0);
 //        robot.Setup_Deposit_Claw(false);
 //        robot.wristBack();
     }
@@ -231,8 +256,7 @@ public class SampleBusy extends OpMode {
                     realState = 1;
 //                    intakeBack();
                     highScore();
-//                    highScore();
-                    if(pathTimer.getElapsedTimeSeconds()>3.5){
+                    if(pathTimer.getElapsedTimeSeconds()>3.6){
                         intakeOut();
                         follower.followPath(grabPickup1,true);
                         setPathState(2);
@@ -241,11 +265,12 @@ public class SampleBusy extends OpMode {
                 break;
             case 2:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
-                if(!follower.isBusy() &&  pathTimer.getElapsedTimeSeconds()>4) {
+                if(!follower.isBusy() &&  pathTimer.getElapsedTimeSeconds()>0.5) {
                     realState = 2;
                     intakeBack();
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    if(pathTimer.getElapsedTimeSeconds()>8){
+                    if(pathTimer.getElapsedTimeSeconds()>1.2){
+                        robot.Intake(0);
                         follower.followPath(scorePickup1,true);
                         setPathState(3);
                     }
@@ -254,13 +279,15 @@ public class SampleBusy extends OpMode {
                 break;
             case 3:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 10) {
+                if(!follower.isBusy()) {
                     realState = 3;
                     highScore();
+                    if(pathTimer.getElapsedTimeSeconds()>5){
+                        follower.followPath(grabPickup2,true);
+                        intakeOut();
+                        setPathState(4);
+                    }
 
-                    follower.followPath(grabPickup2,true);
-                    intakeOut();
-                    setPathState(4);
                 }
                 break;
             case 4:
