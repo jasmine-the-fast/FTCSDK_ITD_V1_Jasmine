@@ -10,24 +10,21 @@ import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
-
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Robot.Structure.Hardware.BTRobotVBusy;
-import org.firstinspires.ftc.teamcode.Robot.Structure.Library.PoseStorage;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 
-@Autonomous(name = "SampleBusy_Auto", group = "OpMode")
-public class SampleBusy extends OpMode {
+@Autonomous(name = "SampleCase _Auto", group = "OpMode")
+public class SampleArm extends OpMode {
     BTRobotVBusy robot = new BTRobotVBusy(this);
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
 
     /** This is the variable where we store the state of our auto.
      * It is used by the pathUpdate method. */
-    private int pathState,armState, commandState;
+    private int pathState,armState,slideState, commandState;
     private int realState;
 
     public String Color_Alliance = null;
@@ -179,28 +176,7 @@ public class SampleBusy extends OpMode {
             Thread.currentThread().interrupt();
         }
     }
-    public void highScore(){
-        if (pathTimer.getElapsedTimeSeconds()<0.1) {
-            robot.Setup_Deposit_Claw(false);
-        }
-        else if (pathTimer.getElapsedTimeSeconds()<1.8){
-            robot.verticalSlideUp();
-            robot.Setup_Deposit_Claw(false);
-            robot.Setup_Deposit_Arm(0.60);
-            robot.Deposit_Wrist(true);
-        }
-        else if (pathTimer.getElapsedTimeSeconds()<5){
-            robot.Setup_Deposit_Claw(true);
-        }
-        else if (pathTimer.getElapsedTimeSeconds()<5.4){
-            robot.Setup_Deposit_Arm(0.15);
-            robot.Deposit_Wrist(false);
-        }
-        else if (pathTimer.getElapsedTimeSeconds()<6.2){
-            robot.TransferSample();
-            intakeBack();
-        }
-    }
+
     public void scoreWithTransfer(){
         if (pathTimer.getElapsedTimeSeconds()<0.1) {
             robot.Setup_Deposit_Claw(false);
@@ -242,10 +218,8 @@ public class SampleBusy extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                realState = 0;
-                telemetry.addLine("case0");
-                telemetry.update();
-                robot.Setup_Intake_Pose_RTP(true);
+                setSlideState(0);
+                setArmState(0);
 //                robot.wristOut();
                 follower.followPath(scorePreload);
                 setPathState(1);
@@ -253,40 +227,43 @@ public class SampleBusy extends OpMode {
             case 1:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
-                    realState = 1;
 //                    intakeBack();
-                    highScore();
-                    if(pathTimer.getElapsedTimeSeconds()>6.3){
-                        intakeOut();
-                        follower.followPath(grabPickup1,true);
-                        setPathState(2);
-                    }
+                    robot.Setup_Deposit_Claw(true);
+                        setPathState(101);
+
+                }
+                break;
+            case 101:
+                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                    follower.followPath(grabPickup1,true);
+                    setPathState(2);
                 }
                 break;
             case 2:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy() &&  pathTimer.getElapsedTimeSeconds()>0.5) {
-                    realState = 2;
-                    intakeBack();
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    if(pathTimer.getElapsedTimeSeconds()>1.2){
-                        robot.Intake(0);
+                    setSlideState(1);
+                    setArmState(1);
                         follower.followPath(scorePickup1,true);
                         setPathState(3);
-                    }
+
 
                 }
                 break;
             case 3:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
-                    realState = 3;
-                    highScore();
-                    if(pathTimer.getElapsedTimeSeconds()>10){
+
+                    setSlideState(0);
+                    setArmState(0);
+                    if(pathTimer.getElapsedTimeSeconds()>1){
                         follower.followPath(grabPickup2,true);
-                        intakeOut();
+                        setSlideState(1);
+                        setArmState(1);
                         setPathState(4);
                     }
+
 
                 }
                 break;
@@ -303,7 +280,6 @@ public class SampleBusy extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
                     realState = 5;
-                    highScore();
                     intakeOut();
                     follower.followPath(grabPickup3,true);
                     setPathState(6);
@@ -322,7 +298,6 @@ public class SampleBusy extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5) {
                     realState = 7;
-                    highScore();
                     follower.followPath(park,true);
                     setPathState(8);
                 }
@@ -334,18 +309,55 @@ public class SampleBusy extends OpMode {
                     /* Level 1 Ascent */
 
                     /* Set the state to a Case we won't use or define, so it just stops running an new paths */
-                    setPathState(-1);
                 }
                 break;
         }
     }
+    public void autonomousArmUpdate() {
+        switch (armState) {
+            case 0:
+                //move the arm up to scoring pose
+                robot.ADAR.setPosition(0.55);
+                robot.ADAL.setPosition(0.55);
+                robot.DW.setPosition(1.0);
+                break;
+            case 1:
+                //move the arm to transfer pose
+                robot.ADAR.setPosition(0.15);
+                robot.ADAL.setPosition(0.15);
+                robot.DW.setPosition(0.63);
+                break;
+        }
+        switch (slideState) {
+            case 0:
+                //slides up
+                robot.VLL.setTargetPosition(760);
+                robot.VLR.setTargetPosition(760);
+                robot.VLL.setPower(1.0);
+                robot.VLR.setPower(1.0);
+                break;
+            case 1:
+                //slides down
+                robot.VLL.setTargetPosition(0);
+                robot.VLR.setTargetPosition(0);
+                robot.VLL.setPower(0.75);
+                robot.VLR.setPower(0.75);
+                break;
+        }
 
+    }
 
     /** These change the states of the paths and actions
      * It will also reset the timers of the individual switches **/
     public void setPathState(int pState) {
         pathState = pState;
         pathTimer.resetTimer();
+    }
+    public void setArmState(int aState) {
+        armState = aState;
+    }
+    public void setSlideState(int aState) {
+        armState = aState;
     }
 
     /** This is the main loop of the OpMode, it will run repeatedly after clicking "Play". **/

@@ -21,8 +21,8 @@ public class BTRobotV1 {
     final public double MAX_HL_Distance = 1.0;
      */
 
-    public double HL_Extension = 0;
-    public double HL_Increment = 0.1;
+    public double HL_Extension = 0.3;
+    public double HL_Increment = 0.05;
     final public double MIN_HL_Distance = 0.3;
     final public double MAX_HL_Distance = 1.0;
 
@@ -31,12 +31,12 @@ public class BTRobotV1 {
     final public double MIN_I_Rotation = 0.0;
     final public double MAX_I_Rotation = 1.0;
 
-    public double DW_Rotation = 0.1;
+    public double DW_Rotation = 0.63;
     public double DW_Increment = 0.01;
     final public double DW_MIN_Rotation = 0.63;
     final public double DW_MAX_Rotation = 1;
 
-    public double DA_Rotation = 0;
+    public double DA_Rotation = 0.15;
     public double DA_Increment = 0.1;
     final public double DA_MIN_Rotation = 0.15;
     final public double DA_MAX_Rotation = 0.95;
