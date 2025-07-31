@@ -340,11 +340,21 @@ public class BTRobotV1 {
         Setup_Vertical_Lift(475, 1.0);
     }
 
+    public void verticalSlideUp(){
+        Setup_Vertical_Lift(800, 1.0);
+    }
+
+    public void readyToDropToBox(){
+        Setup_Deposit_Arm(0.6);
+        Setup_Deposit_Wrist(DW_MIN_Rotation);
+    }
     public void HighBasketScore(){
+        Setup_Intake_Pose(0.2);
         Setup_Deposit_Arm(0.55);
-        Setup_Deposit_Wrist(1.0);
+        Setup_Deposit_Wrist(DW_MAX_Rotation);
         Setup_Vertical_Lift(760, 1.0);
     }
+
 
 
 
@@ -355,6 +365,12 @@ public class BTRobotV1 {
         Setup_Vertical_Lift(80, 1.0);
     }
 
+    public void LowerSlides(){
+        Setup_Deposit_Claw(true);
+        Setup_Deposit_Arm(0.14);
+        Setup_Deposit_Wrist(DW_MIN_Rotation);
+        Setup_Vertical_Lift(0, 1.0);
+    }
     public void TransferSample(){
         Setup_Deposit_Arm(0.15);
         Setup_Deposit_Wrist(0.63);
