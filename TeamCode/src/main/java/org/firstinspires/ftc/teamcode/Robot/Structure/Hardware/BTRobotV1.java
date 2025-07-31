@@ -351,7 +351,7 @@ public class BTRobotV1 {
     public void HighBasketScore(){
         Setup_Intake_Pose(0.2);
         Setup_Deposit_Arm(0.55);
-        Setup_Deposit_Wrist(DW_MAX_Rotation);
+        Setup_Deposit_Wrist(0.75);
         Setup_Vertical_Lift(760, 1.0);
     }
 
@@ -373,7 +373,7 @@ public class BTRobotV1 {
     }
     public void TransferSample(){
         Setup_Deposit_Arm(0.15);
-        Setup_Deposit_Wrist(0.63);
+        Setup_Deposit_Wrist(0.0);
         Setup_Vertical_Lift(0, 0.7);
     }
 }
