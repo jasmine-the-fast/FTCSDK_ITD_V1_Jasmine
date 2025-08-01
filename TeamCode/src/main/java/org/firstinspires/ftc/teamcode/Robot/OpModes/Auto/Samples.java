@@ -312,16 +312,16 @@ public class Samples extends OpMode {
                 if(!follower.isBusy()) {
                     realState = 3;
                     highScoreWithDelay(0.0);
-                    if(pathTimer.getElapsedTimeSeconds()>3){
+                    if(pathTimer.getElapsedTimeSeconds()>2.5){
                         follower.followPath(grabPickup2,true);
                         setPathState(401);
                     }
                 }
                 break;
             case 401:
-                if(!follower.isBusy() &&  pathTimer.getElapsedTimeSeconds()>0.5){
+                if(!follower.isBusy() &&  pathTimer.getElapsedTimeSeconds()>0.4){
                     intakeOut();
-                    if(pathTimer.getElapsedTimeSeconds()> 1.4){
+                    if(pathTimer.getElapsedTimeSeconds()> 1.35){
                         setPathState(4);
                     }
                 }
@@ -411,7 +411,7 @@ public class Samples extends OpMode {
                 if(!follower.isBusy() ) {
                     robot.Setup_Intake_Pose_RTP(true);
                     realState = 791;
-                    if (pathTimer.getElapsedTimeSeconds()>0.201){
+                    if (pathTimer.getElapsedTimeSeconds()>0.2){
                         setPathState(701);
                     }
                 }
@@ -420,7 +420,7 @@ public class Samples extends OpMode {
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.001) {
                     robot.Setup_Deposit_Claw(false);
                     realState = 701;
-                    if (pathTimer.getElapsedTimeSeconds()>0.201){
+                    if (pathTimer.getElapsedTimeSeconds()>0.16){
                         robot.Setup_Intake_Pose(0.2);
                         setPathState(702);
                     }
@@ -431,7 +431,7 @@ public class Samples extends OpMode {
 //                    robot.Setup_Deposit_Claw(false);
                     raiseArm();
                     realState = 702;
-                    if (pathTimer.getElapsedTimeSeconds()>1.5){
+                    if (pathTimer.getElapsedTimeSeconds()>1.2){
                         setPathState(7);
                     }
                 }
@@ -442,6 +442,7 @@ public class Samples extends OpMode {
                     realState = 3;
                     highScoreWithDelay(0.0);
                     if(pathTimer.getElapsedTimeSeconds()>3){
+                        robot.Setup_Vertical_Lift(0, 1.0);
                         follower.followPath(park,true);
                         intakeOut();
                         setPathState(8);
