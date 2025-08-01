@@ -57,7 +57,7 @@ public class Samples extends OpMode {
     private final Pose pickup2Pose = new Pose(18, 130, Math.toRadians(0));
 
     /** Highest (Third) Sample from the Spike Mark */
-    private final Pose pickup3Pose = new Pose(20, 130, Math.toRadians(35));
+    private final Pose pickup3Pose = new Pose(20, 130, Math.toRadians(25));
 
     /** Park Pose for our robot, after we do all of the scoring. */
     private final Pose parkPose = new Pose(60, 98, Math.toRadians(90));
@@ -260,7 +260,7 @@ public class Samples extends OpMode {
 //                    robot.Setup_Horizontal_Lift(0.0);
                     highScoreWithDelay(1);
                     robot.Setup_Intake_Pose(0);
-                    if(pathTimer.getElapsedTimeSeconds()>4.6){
+                    if(pathTimer.getElapsedTimeSeconds()>3.5){
                         follower.followPath(grabPickup1,true);
                         setPathState(201);
                     }
@@ -280,7 +280,7 @@ public class Samples extends OpMode {
                     realState = 2;
                     intakeBack();
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    if(pathTimer.getElapsedTimeSeconds()>1.5){
+                    if(pathTimer.getElapsedTimeSeconds()>1.4){
                         robot.Intake(0);
                         intakeBack();
                         follower.followPath(scorePickup1,true);
@@ -290,12 +290,10 @@ public class Samples extends OpMode {
                 break;
             case 301:
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.001) {
-//                    robot.Setup_Deposit_Claw(false);
                     robot.Setup_Deposit_Claw(false);
                     realState = 301;
                     if (pathTimer.getElapsedTimeSeconds()>0.201){
                         robot.Setup_Intake_Pose(0.2);
-//                        robot.Setup_Intake_Pose_RTP(false);
                         setPathState(302);
                     }
                 }
@@ -315,7 +313,7 @@ public class Samples extends OpMode {
                 if(!follower.isBusy()) {
                     realState = 3;
                     highScoreWithDelay(0.0);
-                    if(pathTimer.getElapsedTimeSeconds()>3.2){
+                    if(pathTimer.getElapsedTimeSeconds()>3.5){
                         follower.followPath(grabPickup2,true);
                         setPathState(401);
                     }
@@ -324,7 +322,7 @@ public class Samples extends OpMode {
             case 401:
                 if(!follower.isBusy() &&  pathTimer.getElapsedTimeSeconds()>0.5){
                     intakeOut();
-                    if(pathTimer.getElapsedTimeSeconds()> 1){
+                    if(pathTimer.getElapsedTimeSeconds()> 1.4){
                         setPathState(4);
                     }
                 }
@@ -332,9 +330,10 @@ public class Samples extends OpMode {
             case 4:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy() ) {
-                    realState = 401;
-                    robot.Setup_Intake_Pose_RTP(true); //intake up pos
-                    robot.Setup_Horizontal_Lift(0.0); //intake back
+                    realState = 4;
+                    robot.Intake_Poop(true);
+                    robot.Setup_Intake_Pose_RTP(true);
+                    intakeBack();
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     if(pathTimer.getElapsedTimeSeconds()>4){
                         robot.Intake(0);
@@ -348,7 +347,7 @@ public class Samples extends OpMode {
 //                    robot.Setup_Deposit_Claw(false);
                     robot.Setup_Intake_Pose_RTP(true);
                     realState = 591;
-                    if (pathTimer.getElapsedTimeSeconds()>0.901){
+                    if (pathTimer.getElapsedTimeSeconds()>0.15){
 //                        robot.Setup_Intake_Pose_RTP(false);
                         setPathState(501);
                     }
@@ -358,8 +357,8 @@ public class Samples extends OpMode {
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.001) {
 //                    robot.Setup_Deposit_Claw(false);
                     robot.Setup_Deposit_Claw(false);
-                    realState = 301;
-                    if (pathTimer.getElapsedTimeSeconds()>0.201){
+                    realState = 501;
+                    if (pathTimer.getElapsedTimeSeconds()>0.15){
                         robot.Setup_Intake_Pose(0.2);
 //                        robot.Setup_Intake_Pose_RTP(false);
                         setPathState(502);
@@ -371,7 +370,7 @@ public class Samples extends OpMode {
 //                    robot.Setup_Deposit_Claw(false);
                     raiseArm();
                     realState = 302;
-                    if (pathTimer.getElapsedTimeSeconds()>1.102){
+                    if (pathTimer.getElapsedTimeSeconds()>2.5){
                         setPathState(5);
                     }
                 }
@@ -381,7 +380,7 @@ public class Samples extends OpMode {
                 if(!follower.isBusy()) {
                     realState = 3;
                     highScoreWithDelay(0.0);
-                    if(pathTimer.getElapsedTimeSeconds()>3.2){
+                    if(pathTimer.getElapsedTimeSeconds()>3.5){
                         follower.followPath(grabPickup3,true);
                         setPathState(601);
                     }
@@ -389,20 +388,8 @@ public class Samples extends OpMode {
                 break;
             case 601: //
                 if(!follower.isBusy() ) {
-//                    robot.Setup_Deposit_Claw(false);
-                    robot.Setup_Intake_Pose_RTP(true);
-                    realState = 602;
-                    if (pathTimer.getElapsedTimeSeconds()>0.501){
-//                        robot.Setup_Intake_Pose_RTP(false);
-                        setPathState(602);
-                    }
-                }
-                break;
-            case 602:
-                if(!follower.isBusy()){
-                    robot.Intake(-1.0);
-                    robot.Setup_Horizontal_Lift(1.0);
-                    if(pathTimer.getElapsedTimeSeconds()> 1){
+                    intakeOut();
+                    if (pathTimer.getElapsedTimeSeconds()>1.6){
                         setPathState(6);
                     }
                 }
@@ -413,42 +400,39 @@ public class Samples extends OpMode {
                     realState = 6;
                     intakeBack();
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    if(pathTimer.getElapsedTimeSeconds()>2){
+                    if(pathTimer.getElapsedTimeSeconds()>1.4){
                         robot.Intake(0);
                         intakeBack();
-//                        follower.followPath(scorePickup3,true);
+                        follower.followPath(scorePickup3,true);
                         setPathState(791);
                     }
                 }
                 break;
             case 791:   //lift intaker for 3rd sample grip
                 if(!follower.isBusy() ) {
-//                    robot.Setup_Deposit_Claw(false);
                     robot.Setup_Intake_Pose_RTP(true);
                     realState = 791;
-                    if (pathTimer.getElapsedTimeSeconds()>0.501){
-//                        robot.Setup_Intake_Pose_RTP(false);
+                    if (pathTimer.getElapsedTimeSeconds()>0.201){
                         setPathState(701);
                     }
                 }
                 break;
             case 701:   //grip 3rd sample
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.001) {
-//                    robot.Setup_Deposit_Claw(false);
                     robot.Setup_Deposit_Claw(false);
-                    realState = 301;
-                    if (pathTimer.getElapsedTimeSeconds()>0.501){
-                        robot.Setup_Intake_Pose_RTP(false);
+                    realState = 701;
+                    if (pathTimer.getElapsedTimeSeconds()>0.201){
+                        robot.Setup_Intake_Pose(0.2);
                         setPathState(702);
                     }
                 }
                 break;
             case 702:   //raise arm for 3rd sample
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.102) {
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.35) {
 //                    robot.Setup_Deposit_Claw(false);
                     raiseArm();
-                    realState = 302;
-                    if (pathTimer.getElapsedTimeSeconds()>1.102){
+                    realState = 702;
+                    if (pathTimer.getElapsedTimeSeconds()>1.5){
                         setPathState(7);
                     }
                 }
@@ -458,7 +442,7 @@ public class Samples extends OpMode {
                 if(!follower.isBusy()) {
                     realState = 3;
                     highScoreWithDelay(0.0);
-                    if(pathTimer.getElapsedTimeSeconds()>3.2){
+                    if(pathTimer.getElapsedTimeSeconds()>2.5){
                         follower.followPath(park,true);
                         intakeOut();
                         setPathState(8);
