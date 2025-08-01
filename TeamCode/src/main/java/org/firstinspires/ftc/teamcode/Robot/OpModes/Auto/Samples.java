@@ -291,16 +291,17 @@ public class Samples extends OpMode {
             case 301:
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.001) {
 //                    robot.Setup_Deposit_Claw(false);
-                    transferSample();
+                    robot.Setup_Deposit_Claw(false);
                     realState = 301;
-                    if (pathTimer.getElapsedTimeSeconds()>0.401){
+                    if (pathTimer.getElapsedTimeSeconds()>0.201){
+                        robot.Setup_Intake_Pose(0.2);
 //                        robot.Setup_Intake_Pose_RTP(false);
                         setPathState(302);
                     }
                 }
                 break;
             case 302:
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.102) {
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.302) {
 //                    robot.Setup_Deposit_Claw(false);
                     raiseArm();
                     realState = 302;
@@ -359,13 +360,14 @@ public class Samples extends OpMode {
                     robot.Setup_Deposit_Claw(false);
                     realState = 301;
                     if (pathTimer.getElapsedTimeSeconds()>0.201){
+                        robot.Setup_Intake_Pose(0.2);
 //                        robot.Setup_Intake_Pose_RTP(false);
                         setPathState(502);
                     }
                 }
                 break;
             case 502:
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.102) {
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.302) {
 //                    robot.Setup_Deposit_Claw(false);
                     raiseArm();
                     realState = 302;

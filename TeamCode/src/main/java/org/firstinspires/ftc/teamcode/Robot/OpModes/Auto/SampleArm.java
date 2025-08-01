@@ -220,7 +220,6 @@ public class SampleArm extends OpMode {
             case 0:
                 setSlideState(0);
                 setArmState(0);
-//                robot.wristOut();
                 follower.followPath(scorePreload);
                 setPathState(1);
                 break;
