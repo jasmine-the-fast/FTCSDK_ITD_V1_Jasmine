@@ -302,7 +302,7 @@ public class Samples extends OpMode {
 //                    robot.Setup_Deposit_Claw(false);
                     raiseArm();
                     realState = 302;
-                    if (pathTimer.getElapsedTimeSeconds()>1.102){
+                    if (pathTimer.getElapsedTimeSeconds()>5.102){
                         setPathState(3);
                     }
                 }
@@ -312,7 +312,7 @@ public class Samples extends OpMode {
                 if(!follower.isBusy()) {
                     realState = 3;
                     highScoreWithDelay(0.0);
-                    if(pathTimer.getElapsedTimeSeconds()>2.5){
+                    if(pathTimer.getElapsedTimeSeconds()>5){
                         follower.followPath(grabPickup2,true);
                         setPathState(401);
                     }
