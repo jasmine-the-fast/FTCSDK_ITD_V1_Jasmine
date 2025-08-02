@@ -312,7 +312,7 @@ public class Samples extends OpMode {
                 if(!follower.isBusy()) {
                     realState = 3;
                     highScoreWithDelay(0.0);
-                    if(pathTimer.getElapsedTimeSeconds()>5){
+                    if(pathTimer.getElapsedTimeSeconds()>3){
                         follower.followPath(grabPickup2,true);
                         setPathState(401);
                     }
