@@ -243,7 +243,8 @@ public class Samples extends OpMode {
                     realState = 1;
                     highScoreWithDelay(0.0);
                     robot.Setup_Intake_Pose(0);
-                    if(pathTimer.getElapsedTimeSeconds()>2.5){
+                    robot.Setup_Intake_Pose_RTP(false);
+                    if(pathTimer.getElapsedTimeSeconds()>2.7){
                         follower.followPath(grabPickup1,true);
                         setPathState(201);
                     }
@@ -283,7 +284,7 @@ public class Samples extends OpMode {
                 }
                 break;
             case 302:
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.202) {
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.102) {
                     raiseArm();
                     realState = 302;
                     if (pathTimer.getElapsedTimeSeconds()>3){
@@ -319,7 +320,7 @@ public class Samples extends OpMode {
                     robot.Intake_Poop(true);
                     intakeBack();
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    if(pathTimer.getElapsedTimeSeconds()>2.5){
+                    if(pathTimer.getElapsedTimeSeconds()>1.5){
                         follower.followPath(scorePickup2,true);
                         setPathState(591);
                     }
@@ -345,7 +346,7 @@ public class Samples extends OpMode {
                 }
                 break;
             case 502:
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.202) {
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.102) {
                     raiseArm();
                     realState = 302;
                     if (pathTimer.getElapsedTimeSeconds()>2.5){
