@@ -51,10 +51,10 @@ public class Samples extends OpMode {
     private final Pose scorePose = new Pose(16, 130, Math.toRadians(315));
 
     /** Lowest (First) Sample from the Spike Mark */
-    private final Pose pickup1Pose = new Pose(18, 125, Math.toRadians(355));
+    private final Pose pickup1Pose = new Pose(18, 124, Math.toRadians(355));
 
     /** Middle (Second) Sample from the Spike Mark */
-    private final Pose pickup2Pose = new Pose(18, 132, Math.toRadians(0));
+    private final Pose pickup2Pose = new Pose(18, 130, Math.toRadians(0));
 
     /** Highest (Third) Sample from the Spike Mark */
     private final Pose pickup3Pose = new Pose(20, 130, Math.toRadians(25));
@@ -216,7 +216,7 @@ public class Samples extends OpMode {
     }
     public void intakeOut(){
         //not timing it, because very likely it will be followed by a pedro moving
-        robot.Intake(-1.0);
+        robot.Intake(-0.55);
         robot.Setup_Intake_Pose_RTP(false);
 //                    robot.Horizontal_Lift(true);a
         robot.Setup_Horizontal_Lift(1.0);
@@ -268,9 +268,12 @@ public class Samples extends OpMode {
             case 201:
                 if(!follower.isBusy()){
                     intakeOut();
-                    if(pathTimer.getElapsedTimeSeconds()>1){
-                        setPathState(2);
-                    }
+                    setPathState(202);
+                }
+                break;
+            case 202:
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>2){
+                    setPathState(2);
                 }
                 break;
             case 2:
@@ -301,7 +304,6 @@ public class Samples extends OpMode {
                     setPathState(302);
                 }
                 break;
-
             case 302:
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.302) {
 //                    robot.Setup_Deposit_Claw(false);
@@ -327,11 +329,14 @@ public class Samples extends OpMode {
                 }
                 break;
             case 401:
-                if(!follower.isBusy() &&  pathTimer.getElapsedTimeSeconds()>0.4){
+                if(!follower.isBusy() &&  pathTimer.getElapsedTimeSeconds()>0.6){
                     intakeOut();
-                    if(pathTimer.getElapsedTimeSeconds()> 1.35){
-                        setPathState(4);
-                    }
+                    setPathState(402);
+                }
+                break;
+            case 402:
+                if(!follower.isBusy() &&pathTimer.getElapsedTimeSeconds()>2){
+                    setPathState(4);
                 }
                 break;
             case 4:
@@ -400,9 +405,13 @@ public class Samples extends OpMode {
             case 601: //
                 if(!follower.isBusy() ) {
                     intakeOut();
-                    if (pathTimer.getElapsedTimeSeconds()>1.4){
-                        setPathState(6);
-                    }
+                        setPathState(602);
+
+                }
+                break;
+            case 602:
+                if(!follower.isBusy() &&pathTimer.getElapsedTimeSeconds()>2){
+                    setPathState(6);
                 }
                 break;
             case 6:
@@ -445,6 +454,7 @@ public class Samples extends OpMode {
                     realState = 702;
                         setPathState(708);
                 }
+                break;
             case 708:
                 if (!follower.isBusy()&&pathTimer.getElapsedTimeSeconds()>1) {
                     setPathState(7);
@@ -458,7 +468,6 @@ public class Samples extends OpMode {
                     if(pathTimer.getElapsedTimeSeconds()>3){
                         robot.Setup_Vertical_Lift(0, 1.0);
                         follower.followPath(park,true);
-                        intakeOut();
                         setPathState(8);
                     }
                 }
