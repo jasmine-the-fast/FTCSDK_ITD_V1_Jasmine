@@ -291,20 +291,28 @@ public class Samples extends OpMode {
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.001) {
                     robot.Setup_Deposit_Claw(false);
                     realState = 301;
-                    if (pathTimer.getElapsedTimeSeconds()>0.21){
-                        robot.Setup_Intake_Pose(0.2);
-                        setPathState(302);
-                    }
+                    setPathState(3011);
                 }
                 break;
+            case 3011:
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.21){
+                    realState = 3011;
+                    robot.Setup_Intake_Pose(0.2);
+                    setPathState(302);
+                }
+                break;
+
             case 302:
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.302) {
 //                    robot.Setup_Deposit_Claw(false);
                     raiseArm();
                     realState = 302;
-                    if (pathTimer.getElapsedTimeSeconds()>5.102){
-                        setPathState(3);
-                    }
+                    setPathState(303);
+                }
+                break;
+            case 303:
+                if (pathTimer.getElapsedTimeSeconds()>1.102){
+                    setPathState(3);
                 }
                 break;
             case 3:
@@ -369,9 +377,13 @@ public class Samples extends OpMode {
 //                    robot.Setup_Deposit_Claw(false);
                     raiseArm();
                     realState = 302;
-                    if (pathTimer.getElapsedTimeSeconds()>2.5){
-                        setPathState(5);
-                    }
+                    setPathState(505);
+
+                }
+                break;
+            case 505:
+                if (pathTimer.getElapsedTimeSeconds()>1){
+                    setPathState(5);
                 }
                 break;
             case 5:

@@ -21,8 +21,8 @@ public class BTRobotVBusy {
     final public double MAX_HL_Distance = 1.0;
      */
 
-    public double HL_Extension = 0;
-    public double HL_Increment = 0.1;
+    public double HL_Extension = 0.3;
+    public double HL_Increment = 0.05;
     final public double MIN_HL_Distance = 0.3;
     final public double MAX_HL_Distance = 1.0;
 
@@ -31,12 +31,12 @@ public class BTRobotVBusy {
     final public double MIN_I_Rotation = 0.0;
     final public double MAX_I_Rotation = 1.0;
 
-    public double DW_Rotation = 0.1;
+    public double DW_Rotation = 0.63;
     public double DW_Increment = 0.01;
     final public double DW_MIN_Rotation = 0.63;
     final public double DW_MAX_Rotation = 1;
 
-    public double DA_Rotation = 0;
+    public double DA_Rotation = 0.15;
     public double DA_Increment = 0.1;
     final public double DA_MIN_Rotation = 0.15;
     final public double DA_MAX_Rotation = 0.95;
@@ -349,17 +349,19 @@ public class BTRobotVBusy {
         Setup_Deposit_Wrist(DW_MIN_Rotation);
     }
     public void HighBasketScore(){
+        Setup_Intake_Pose(0.2);
         Setup_Deposit_Arm(0.55);
-        Setup_Deposit_Wrist(DW_MAX_Rotation);
+        Setup_Deposit_Wrist(0.75);
         Setup_Vertical_Lift(760, 1.0);
     }
+
 
 
 
     public void SpecimenGrab(){
         Setup_Deposit_Claw(true);
         Setup_Deposit_Arm(0.95);
-        Setup_Deposit_Wrist(DW_MAX_Rotation);
+        Setup_Deposit_Wrist(0.63);
         Setup_Vertical_Lift(80, 1.0);
     }
 
@@ -371,7 +373,7 @@ public class BTRobotVBusy {
     }
     public void TransferSample(){
         Setup_Deposit_Arm(0.15);
-        Setup_Deposit_Wrist(DW_MIN_Rotation);
-        Setup_Vertical_Lift(0, 1.0);
+        Setup_Deposit_Wrist(0.0);
+        Setup_Vertical_Lift(0, 0.7);
     }
 }
