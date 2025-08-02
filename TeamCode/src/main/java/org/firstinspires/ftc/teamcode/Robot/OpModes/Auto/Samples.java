@@ -286,7 +286,7 @@ public class Samples extends OpMode {
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds()>0.202) {
                     raiseArm();
                     realState = 302;
-                    if (pathTimer.getElapsedTimeSeconds()>3.102){
+                    if (pathTimer.getElapsedTimeSeconds()>3){
                         setPathState(3);
                     }
                 }
