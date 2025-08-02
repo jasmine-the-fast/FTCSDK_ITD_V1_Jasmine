@@ -334,7 +334,7 @@ public class Samples extends OpMode {
                     robot.Setup_Intake_Pose_RTP(true);
                     intakeBack();
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    if(pathTimer.getElapsedTimeSeconds()>4){
+                    if(pathTimer.getElapsedTimeSeconds()>2.5){
                         robot.Intake(0);
                         follower.followPath(scorePickup2,true);
                         setPathState(591);
