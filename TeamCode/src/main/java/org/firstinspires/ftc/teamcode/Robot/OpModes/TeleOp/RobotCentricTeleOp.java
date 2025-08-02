@@ -40,6 +40,7 @@ public class RobotCentricTeleOp extends LinearOpMode {
     private String Mode = "Regular_Mode";
     @Override
     public void runOpMode() {
+        robot.setIsAuto(false);
         robot.initialize(true);
         while (opModeInInit()) {
             telemetry.addData(">", "Touch Play to Drive");

@@ -53,7 +53,7 @@ public class BTRobotV1 {
         myOpMode = opMode;
     }
     //NOTE: when not talking about a lift L indicates Left and R indicates Right
-    public DcMotor VLL, VLR, I, HL;
+    public DcMotor VLL, VLR, I;
     public Servo HLL, HLR, IL, IR, DW, DC, IP, ADAL, ADAR;
     public RevColorSensorV3 colorSensor;
 
@@ -64,12 +64,22 @@ public class BTRobotV1 {
     private double blueValue;
     private double greenValue;
     private double alphaValue; //light Intensity
+    private static boolean isAuto = false;
     private double targetValue = 1000;
+
+    public void setIsAuto(boolean tf) {
+        isAuto = tf;
+    }
 
     public void initialize(boolean showTelemetry) {
         //Vertical lift Motors
-        VLL = setupMotor("VLL", DcMotor.Direction.FORWARD);
-        VLR = setupMotor("VLR", DcMotor.Direction.REVERSE);
+        if(isAuto) {
+            VLL = setupAutoLiftMotor("VLL", DcMotor.Direction.FORWARD);
+            VLR = setupAutoLiftMotor("VLR", DcMotor.Direction.REVERSE);
+        } else {
+            VLL = setupLiftMotor("VLL", DcMotor.Direction.FORWARD);
+            VLR = setupLiftMotor("VLR", DcMotor.Direction.REVERSE);
+        }
 
         //Horizontal lift Servo
         HLL = setupServo("HLL", Servo.Direction.REVERSE);
@@ -101,6 +111,11 @@ public class BTRobotV1 {
         colorSensor.enableLed(true);
 
         touchSensor = (TouchSensor) myOpMode.hardwareMap.get("touchSensor");
+
+        if(DA_Rotation < 0.15) {
+            ADAL.setPosition(0.15);
+            ADAR.setPosition(0.15);
+        }
     }
 
     //Setups the Drive Motor As Well As Setting Direction
@@ -111,10 +126,20 @@ public class BTRobotV1 {
         return aMotor;
     }
 
-    private DcMotor setupMotor(String deviceName, DcMotor.Direction direction) {
+    private DcMotor setupAutoLiftMotor(String deviceName, DcMotor.Direction direction) {
         DcMotor aMotor = myOpMode.hardwareMap.get(DcMotor.class, deviceName);
         aMotor.setDirection(direction);
         aMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        aMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        aMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        aMotor.setTargetPosition(0);
+        aMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        return aMotor;
+    }
+
+    private DcMotor setupLiftMotor(String deviceName, DcMotor.Direction direction) {
+        DcMotor aMotor = myOpMode.hardwareMap.get(DcMotor.class, deviceName);
+        aMotor.setDirection(direction);
         aMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         aMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         aMotor.setTargetPosition(0);
@@ -344,19 +369,12 @@ public class BTRobotV1 {
         Setup_Vertical_Lift(800, 1.0);
     }
 
-    public void readyToDropToBox(){
-        Setup_Deposit_Arm(0.6);
-        Setup_Deposit_Wrist(DW_MIN_Rotation);
-    }
     public void HighBasketScore(){
         Setup_Intake_Pose(0.2);
         Setup_Deposit_Arm(0.55);
         Setup_Deposit_Wrist(0.75);
         Setup_Vertical_Lift(760, 1.0);
     }
-
-
-
 
     public void SpecimenGrab(){
         Setup_Deposit_Claw(true);
@@ -365,12 +383,6 @@ public class BTRobotV1 {
         Setup_Vertical_Lift(80, 1.0);
     }
 
-    public void LowerSlides(){
-        Setup_Deposit_Claw(true);
-        Setup_Deposit_Arm(0.14);
-        Setup_Deposit_Wrist(DW_MIN_Rotation);
-        Setup_Vertical_Lift(0, 1.0);
-    }
     public void TransferSample(){
         Setup_Deposit_Arm(0.15);
         Setup_Deposit_Wrist(0.0);
