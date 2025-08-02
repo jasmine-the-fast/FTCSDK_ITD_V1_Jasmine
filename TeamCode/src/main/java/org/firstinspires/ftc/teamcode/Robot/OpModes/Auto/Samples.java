@@ -265,7 +265,7 @@ public class Samples extends OpMode {
                     realState = 2;
                     intakeBack();
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    if(pathTimer.getElapsedTimeSeconds()>1.5){
+                    if(pathTimer.getElapsedTimeSeconds()>1){
                         intakeBack();
                         follower.followPath(scorePickup1,true);
                         setPathState(301);
