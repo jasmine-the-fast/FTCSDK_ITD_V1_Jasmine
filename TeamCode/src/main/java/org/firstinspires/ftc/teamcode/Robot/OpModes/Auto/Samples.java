@@ -382,7 +382,7 @@ public class Samples extends OpMode {
                 }
                 break;
             case 505:
-                if (pathTimer.getElapsedTimeSeconds()>1){
+                if (!follower.isBusy()&&pathTimer.getElapsedTimeSeconds()>1){
                     setPathState(5);
                 }
                 break;
@@ -443,9 +443,11 @@ public class Samples extends OpMode {
 //                    robot.Setup_Deposit_Claw(false);
                     raiseArm();
                     realState = 702;
-                    if (pathTimer.getElapsedTimeSeconds()>1.2){
-                        setPathState(7);
-                    }
+                        setPathState(708);
+                }
+            case 708:
+                if (!follower.isBusy()&&pathTimer.getElapsedTimeSeconds()>1) {
+                    setPathState(7);
                 }
                 break;
             case 7:     //score the 3rd sample
