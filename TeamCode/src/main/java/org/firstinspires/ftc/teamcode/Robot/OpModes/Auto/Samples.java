@@ -51,13 +51,13 @@ public class Samples extends OpMode {
     private final Pose scorePose = new Pose(16, 130, Math.toRadians(315));
 
     /** Lowest (First) Sample from the Spike Mark */
-    private final Pose pickup1Pose = new Pose(18, 124, Math.toRadians(355));
+    private final Pose pickup1Pose = new Pose(23, 124, Math.toRadians(355));
 
     /** Middle (Second) Sample from the Spike Mark */
-    private final Pose pickup2Pose = new Pose(18, 130, Math.toRadians(0));
+    private final Pose pickup2Pose = new Pose(21, 129.5, Math.toRadians(0));
 
     /** Highest (Third) Sample from the Spike Mark */
-    private final Pose pickup3Pose = new Pose(20, 130, Math.toRadians(25));
+    private final Pose pickup3Pose = new Pose(20, 132, Math.toRadians(20));
 
     /** Park Pose for our robot, after we do all of the scoring. */
     private final Pose parkPose = new Pose(60, 98, Math.toRadians(90));
@@ -281,13 +281,16 @@ public class Samples extends OpMode {
                 if(!follower.isBusy() &&  pathTimer.getElapsedTimeSeconds()>0.5) {
                     realState = 2;
                     intakeBack();
+                    setPathState(205);
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    if(pathTimer.getElapsedTimeSeconds()>1.5){
-                        robot.Intake(0);
-                        intakeBack();
-                        follower.followPath(scorePickup1,true);
-                        setPathState(301);
-                    }
+
+                }
+                break;
+            case 205:
+                if(!follower.isBusy()&&pathTimer.getElapsedTimeSeconds()>1.5){
+                    robot.Intake(0);
+                    follower.followPath(scorePickup1,true);
+                    setPathState(301);
                 }
                 break;
             case 301:

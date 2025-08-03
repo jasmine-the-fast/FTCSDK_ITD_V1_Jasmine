@@ -125,7 +125,7 @@ public class RobotCentricTeleOp extends LinearOpMode {
                 robot.Setup_Deposit_Claw(true);
             }
 
-            robot.Intake(-gamepad2.left_stick_y);
+            robot.Intake(-gamepad2.left_stick_y*0.75);
 
             if(gamepad2.left_bumper){
                 robot.Deposit_Arm(true);
