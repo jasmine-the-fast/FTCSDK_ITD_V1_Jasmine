@@ -13,7 +13,7 @@ public class BTRobotV1 {
     public int VL_Extension = 0;
     public int VL_Increment = 50;
     final public int MIN_VL_Height = 0;
-    final public int MAX_VL_Height = 760;
+    final public int MAX_VL_Height = 770;
     /*
     public double HL_Extension = 0;
     public double HL_Increment = 0.01;
@@ -23,7 +23,7 @@ public class BTRobotV1 {
 
     public double HL_Extension = 0.3;
     public double HL_Increment = 0.05;
-    final public double MIN_HL_Distance = 0.3;
+    final public double MIN_HL_Distance = 0.15;
     final public double MAX_HL_Distance = 1.0;
 
     public double I_Rotation = 0.0;
@@ -319,8 +319,8 @@ public class BTRobotV1 {
 
     public void Setup_Intake_Pose_RTP(boolean t) {
         if(t) {
-            IL.setPosition(0.45);
-            IR.setPosition(0.45);
+            IL.setPosition(0.38);
+            IR.setPosition(0.38);
         } else{
             IL.setPosition(0.0);
             IR.setPosition(0.0);
@@ -373,7 +373,7 @@ public class BTRobotV1 {
         Setup_Intake_Pose(0.2);
         Setup_Deposit_Arm(0.6);
         Setup_Deposit_Wrist(0.75);
-        Setup_Vertical_Lift(760, 1.0);
+        Setup_Vertical_Lift(770, 1.0);
     }
 
     public void SpecimenGrab(){
