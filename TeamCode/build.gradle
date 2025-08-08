@@ -15,6 +15,7 @@
 apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
 
+
 android {
     namespace = 'org.firstinspires.ftc.teamcode'
 
@@ -39,6 +40,9 @@ repositories {
     maven {
         url "https://repo.dairy.foundation/releases"
     }
+    maven {
+        url "https://repo.dairy.foundation/snapshots"
+    }
 }
 dependencies {
     implementation project(':FtcRobotController')
@@ -55,4 +59,10 @@ dependencies {
     // SolversLib
     implementation "org.solverslib:core:0.2.7"
     implementation "org.solverslib:pedroPathing:0.2.5"
+
+    //Mercurial
+    implementation "dev.frozenmilk.dairy:Util:1.0.2"
+    implementation "dev.frozenmilk.dairy:Core:2.0.0"
+    implementation "dev.frozenmilk.dairy:Pasteurized:1.0.0"
+    implementation "dev.frozenmilk.mercurial:Mercurial:1.0.2"
 }
