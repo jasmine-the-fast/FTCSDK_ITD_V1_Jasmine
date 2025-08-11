@@ -9,6 +9,9 @@ import com.qualcomm.hardware.rev.RevColorSensorV3;
 
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import dev.frozenmilk.mercurial.commands.Lambda;
+
 public class BTRobotV1 {
     public int VL_Extension = 0;
     public int VL_Increment = 50;
@@ -53,11 +56,11 @@ public class BTRobotV1 {
         myOpMode = opMode;
     }
     //NOTE: when not talking about a lift L indicates Left and R indicates Right
-    public DcMotor VLL, VLR, I;
-    public Servo HLL, HLR, IL, IR, DW, DC, IP, ADAL, ADAR;
-    public RevColorSensorV3 colorSensor;
+    public static DcMotor VLL, VLR, I;
+    public static Servo HLL, HLR, IL, IR, DW, DC, IP, ADAL, ADAR;
+    public static RevColorSensorV3 colorSensor;
 
-    public TouchSensor touchSensor;
+    public static TouchSensor touchSensor;
     public boolean touchSensorIsPressed = false;
     public double touchSensorValue;
     private double redValue;
@@ -70,6 +73,16 @@ public class BTRobotV1 {
     public void setIsAuto(boolean tf) {
         isAuto = tf;
     }
+
+    public static Lambda setupIntakePoseRTP(double position){
+        return new Lambda("setup-intakePoseRTP")
+                .setInit(() -> {
+                        IL.setPosition(position);
+                        IR.setPosition(position);
+                })
+                .setFinish(() -> true);
+    }
+
 
     public void initialize(boolean showTelemetry) {
         //Vertical lift Motors
