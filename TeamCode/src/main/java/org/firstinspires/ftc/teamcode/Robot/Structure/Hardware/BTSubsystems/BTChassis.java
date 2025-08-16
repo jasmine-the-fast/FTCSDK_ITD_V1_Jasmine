@@ -12,7 +12,13 @@ import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.util.Constants;
 import com.pedropathing.util.DashboardPoseTracker;
 
-import org.firstinspires.ftc.teamcode.Robot.Structure.Hardware.AutoPaths;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.firstinspires.ftc.teamcode.Robot.Structure.Hardware.BTRobotSubsystems;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 
@@ -28,6 +34,7 @@ import java.util.function.Supplier;
 import dev.frozenmilk.dairy.core.Feature;
 import dev.frozenmilk.dairy.core.FeatureRegistrar;
 import dev.frozenmilk.dairy.core.dependency.Dependency;
+import dev.frozenmilk.dairy.core.dependency.annotation.SingleAnnotation;
 import dev.frozenmilk.dairy.core.wrapper.Wrapper;
 import dev.frozenmilk.mercurial.Mercurial;
 import dev.frozenmilk.mercurial.bindings.BoundGamepad;
@@ -35,6 +42,7 @@ import dev.frozenmilk.mercurial.commands.Lambda;
 import dev.frozenmilk.mercurial.commands.Command;
 import dev.frozenmilk.mercurial.subsystems.Subsystem;
 import dev.frozenmilk.mercurial.subsystems.SubsystemObjectCell;
+import kotlin.annotation.MustBeDocumented;
 
 public class BTChassis implements Subsystem {
 
@@ -42,7 +50,7 @@ public class BTChassis implements Subsystem {
     public static Follower follower;
     public static Telemetry telemetry;
     public static DashboardPoseTracker dashboardPoseTracker;
-    public static AutoPaths ourPaths;
+
 
     public BTChassis() {}
 
@@ -51,16 +59,18 @@ public class BTChassis implements Subsystem {
         return Subsystem.super.isActive();
     }
 
+    @Retention(RetentionPolicy.RUNTIME) @Target(ElementType.TYPE) @MustBeDocumented
+    @Inherited
+    public @interface Attach { }
+
+    private Dependency<?> dependency = Subsystem.DEFAULT_DEPENDENCY.and(new SingleAnnotation<>(Attach.class));
+
     @NonNull
     @Override
-    public Dependency<?> getDependency() {
-        return null;
-    }
+    public Dependency<?> getDependency() { return dependency; }
 
     @Override
-    public void setDependency(@NonNull Dependency<?> dependency) {
-
-    }
+    public void setDependency(@NonNull Dependency<?> dependency) { this.dependency = dependency; }
 
     /*
     @Override
@@ -80,14 +90,17 @@ public class BTChassis implements Subsystem {
     @Override
     public void preUserInitHook(@NonNull Wrapper opMode) {
         telemetry = opMode.getOpMode().telemetry;
-        Constants.setConstants(FConstants.class, LConstants.class);
-        follower = new Follower(FeatureRegistrar.getActiveOpMode().hardwareMap, FConstants.class, LConstants.class);
+
+//        Constants.setConstants(FConstants.class, LConstants.class);
+//        follower = new Follower(FeatureRegistrar.getActiveOpMode().hardwareMap, FConstants.class, LConstants.class);
+//        follower.setStartingPose(BTRobotSubsystems.startPose);
+        telemetry.addData("BTChassis_init", "here");
 
         dashboardPoseTracker = BTChassis.follower.getDashboardPoseTracker();
 
-        ourPaths.buildPaths(follower);
 
-        follower.setStartingPose(AutoPaths.startPose);
+
+
 
     }
 
