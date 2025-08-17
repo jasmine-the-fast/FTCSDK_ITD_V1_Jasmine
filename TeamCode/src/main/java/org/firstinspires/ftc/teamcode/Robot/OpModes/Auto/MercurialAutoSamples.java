@@ -32,6 +32,7 @@ public class MercurialAutoSamples extends OpMode {
 
     @Override
     public void init() {
+        telemetry.addLine("MercurialAutoSamples - init");
         robot_subsystems.init(BTChassis.follower);
  //       follower.setStartingPose(BTRobotSubsystems.startPose);
     }
@@ -42,10 +43,11 @@ public class MercurialAutoSamples extends OpMode {
     }
     @Override
     public void start() {
+        telemetry.addLine("MercurialAutoSamples - start");
         new Sequential(
-                BTChassis.followPath(BTRobotSubsystems.scorePreload),
+                BTChassis.followPath(BTChassis.scorePreload),
                 new Wait(5.0),
-                BTChassis.followPathChain(BTRobotSubsystems.grabPickup1),
+                BTChassis.followPathChain(BTChassis.grabPickup1),
                 new Wait(5.0)
         )
                 .schedule();

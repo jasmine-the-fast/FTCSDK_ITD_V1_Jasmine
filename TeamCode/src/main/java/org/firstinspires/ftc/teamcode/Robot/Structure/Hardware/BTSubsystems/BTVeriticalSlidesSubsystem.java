@@ -118,20 +118,5 @@ public class BTVeriticalSlidesSubsystem implements Subsystem {
         return Subsystem.super.register();
     }
 
-    @Nullable
-    @Override
-    public Command getDefaultCommand() {
-        return Subsystem.super.getDefaultCommand();
-    }
 
-    @Override
-    public void setDefaultCommand(@Nullable Command value) {
-        Subsystem.super.setDefaultCommand(value);
-    }
-
-    @NonNull
-    @Override
-    public <T> SubsystemObjectCell<T> subsystemCell(@NonNull Supplier<T> supplier) {
-        return Subsystem.super.subsystemCell(supplier);
-    }
 }
