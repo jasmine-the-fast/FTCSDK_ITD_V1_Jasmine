@@ -41,12 +41,10 @@ public class BTRobotSubsystems {
     /**Intake from Submersible */
     public static final Pose pickupSubPose = new Pose(65, 95, Math.toRadians(270));
 
-    /** Used as the control point for the BeizerCurve for SubPose*/
+    /** Used as the control point for the BezierCurve for SubPose*/
     public static final Pose pickupSubControlPose = new Pose(55, 130, Math.toRadians(270));
 
-    /** Park Pose for our robot, after we do all of the scoring. */
-
-    /** Used as the control point for the BeizerCurve for parkPose*/
+    /** Used as the control point for the BezierCurve for parkPose*/
     public static final Pose parkControlPose = new Pose(63, 110, Math.toRadians(90));
     /** Park Control Pose for our robot, this is used to manipulate the bezier curve that we will create for the parking.
      * The Robot will not go to this pose, it is used a control point for our bezier curve. */

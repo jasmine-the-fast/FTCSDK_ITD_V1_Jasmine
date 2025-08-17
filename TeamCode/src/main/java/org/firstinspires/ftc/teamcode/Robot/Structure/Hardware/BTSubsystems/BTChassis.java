@@ -63,50 +63,36 @@ public class BTChassis implements Subsystem {
     @Inherited
     public @interface Attach { }
 
+
     private Dependency<?> dependency = Subsystem.DEFAULT_DEPENDENCY.and(new SingleAnnotation<>(Attach.class));
 
     @NonNull
     @Override
-    public Dependency<?> getDependency() { return dependency; }
-
-    @Override
-    public void setDependency(@NonNull Dependency<?> dependency) { this.dependency = dependency; }
-
-    /*
-    @Override
-    public void cleanup(@NonNull Wrapper opMode) {
-        Subsystem.super.cleanup(opMode);
+    public Dependency<?> getDependency() {
+        return dependency;
     }
-    */
 
-/*
-    @NonNull
     @Override
-    public Feature deregister() {
-        return Subsystem.super.deregister();
+    public void setDependency(@NonNull Dependency<?> dependency) {
+        this.dependency = dependency;
     }
-*/
+
 
     @Override
     public void preUserInitHook(@NonNull Wrapper opMode) {
         telemetry = opMode.getOpMode().telemetry;
-
-//        Constants.setConstants(FConstants.class, LConstants.class);
-//        follower = new Follower(FeatureRegistrar.getActiveOpMode().hardwareMap, FConstants.class, LConstants.class);
-//        follower.setStartingPose(BTRobotSubsystems.startPose);
         telemetry.addData("BTChassis_init", "here");
 
+        Constants.setConstants(FConstants.class, LConstants.class);
+        follower = new Follower(FeatureRegistrar.getActiveOpMode().hardwareMap, FConstants.class, LConstants.class);
+
         dashboardPoseTracker = BTChassis.follower.getDashboardPoseTracker();
-
-
-
-
-
     }
 
     @Override
     public void postUserInitHook(@NonNull Wrapper opMode) {
-        Subsystem.super.postUserInitHook(opMode);
+        telemetry.addData("BTChassis_init", "postUserInitHook");
+        follower.setStartingPose(BTRobotSubsystems.startPose);
     }
 
     @Override
@@ -121,7 +107,7 @@ public class BTChassis implements Subsystem {
 
     @Override
     public void postUserStartHook(@NonNull Wrapper opMode) {
-        Subsystem.super.postUserStartHook(opMode);
+        telemetry.addData("BTChassis_init", "postUserStartHook");
     }
 
     @Override

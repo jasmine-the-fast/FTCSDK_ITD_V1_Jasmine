@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.Robot.Structure.Hardware.BTRobotSubsystems;
 import org.firstinspires.ftc.teamcode.Robot.Structure.Hardware.BTRobotV1;
 import org.firstinspires.ftc.teamcode.Robot.Structure.Hardware.BTSubsystems.BTChassis;
+import org.firstinspires.ftc.teamcode.Robot.Structure.Hardware.BTSubsystems.BTVeriticalSlidesSubsystem;
 import org.firstinspires.ftc.teamcode.Robot.Structure.Library.PoseStorage;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
@@ -22,18 +23,17 @@ import dev.frozenmilk.mercurial.commands.util.Wait;
 @Mercurial.Attach
 @BTChassis.Attach
 @BulkRead.Attach
+@BTVeriticalSlidesSubsystem.Attach
 
 @Autonomous(name = "Auto_Merc_Sub", group = "OpMode")
 public class MercurialAutoSamples extends OpMode {
     public static BTRobotSubsystems robot_subsystems = new BTRobotSubsystems();
-    public static Follower follower;
+
 
     @Override
     public void init() {
-        Constants.setConstants(FConstants.class, LConstants.class);
-        follower = new Follower(hardwareMap, FConstants.class, LConstants.class);
-        robot_subsystems.init(follower);
-        follower.setStartingPose(BTRobotSubsystems.startPose);
+        robot_subsystems.init(BTChassis.follower);
+ //       follower.setStartingPose(BTRobotSubsystems.startPose);
     }
 
     @Override
