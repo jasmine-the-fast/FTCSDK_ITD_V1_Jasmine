@@ -304,7 +304,7 @@ public class BTChassis implements Subsystem {
     }
 
     public static Lambda followPath(Path path) {
-        telemetry.addLine("BTChassis - followPath");
+//
         return new Lambda("follow-path")
                 .addRequirements(INSTANCE)
                 .setInit(() -> follower.followPath(path, true))
@@ -318,7 +318,7 @@ public class BTChassis implements Subsystem {
     }
 
     public static Lambda followPathChain(PathChain chain) {
-        telemetry.addLine("BTChassis - followPathChain");
+        //telemetry.addLine("BTChassis - followPathChain");
         return new Lambda("follow-path-chain")
                 .addRequirements(INSTANCE)
                 .setInit(() -> follower.followPath(chain, true))
