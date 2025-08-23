@@ -47,6 +47,11 @@ public class MercurialAutoSamples extends OpMode {
         new Sequential(
                 BTChassis.followPath(BTChassis.scorePreload),
                 new Wait(5.0),
+                BTVeriticalSlidesSubsystem.setPowerCommand(1.0),
+                BTVeriticalSlidesSubsystem.runToPosition(BTVeriticalSlidesSubsystem.maxPos),
+                new Wait(5.0),
+                BTVeriticalSlidesSubsystem.runToPosition(BTVeriticalSlidesSubsystem.minPos),
+                new Wait(5.0),
                 BTChassis.followPathChain(BTChassis.grabPickup1),
                 new Wait(5.0)
         )

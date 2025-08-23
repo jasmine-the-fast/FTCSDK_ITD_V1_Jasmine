@@ -24,6 +24,7 @@ import dev.frozenmilk.dairy.core.dependency.Dependency;
 import dev.frozenmilk.dairy.core.dependency.annotation.SingleAnnotation;
 import dev.frozenmilk.dairy.core.wrapper.Wrapper;
 import dev.frozenmilk.mercurial.commands.Command;
+import dev.frozenmilk.mercurial.commands.Lambda;
 import dev.frozenmilk.mercurial.subsystems.Subsystem;
 import dev.frozenmilk.mercurial.subsystems.SubsystemObjectCell;
 
@@ -33,6 +34,9 @@ public class BTVeriticalSlidesSubsystem implements Subsystem {
     public static final BTVeriticalSlidesSubsystem INSTANCE = new BTVeriticalSlidesSubsystem();
     public static Telemetry telemetry;
     public static DcMotor VLL, VLR;
+    public static int maxPos = 800;
+    public static int minPos = 0;
+    public static int tolerance = 10;
 
     private BTVeriticalSlidesSubsystem() {}
 
@@ -61,26 +65,19 @@ public class BTVeriticalSlidesSubsystem implements Subsystem {
 
     @Override
     public void postUserInitHook(@NonNull Wrapper opMode) {
+        telemetry.addData("BTVeriticalSlidesSubsystem", "postUserInitHook");
         Subsystem.super.postUserInitHook(opMode);
     }
 
     @Override
-    public void postUserInitLoopHook(@NonNull Wrapper opMode) {
-        Subsystem.super.postUserInitLoopHook(opMode);
-    }
-
-    @Override
-    public void postUserLoopHook(@NonNull Wrapper opMode) {
-        Subsystem.super.postUserLoopHook(opMode);
-    }
-
-    @Override
     public void postUserStartHook(@NonNull Wrapper opMode) {
+        telemetry.addData("BTVeriticalSlidesSubsystem", "postUserStartHook");
         Subsystem.super.postUserStartHook(opMode);
     }
 
     @Override
     public void postUserStopHook(@NonNull Wrapper opMode) {
+        telemetry.addData("BTVeriticalSlidesSubsystem", "postUserStopHook");
         Subsystem.super.postUserStopHook(opMode);
     }
 
@@ -89,34 +86,78 @@ public class BTVeriticalSlidesSubsystem implements Subsystem {
         HardwareMap hMap = opMode.getOpMode().hardwareMap;
         telemetry = opMode.getOpMode().telemetry;
         telemetry.addData("BTVeriticalSlidesSubsystem", "preUserInitHook");
+        VLL = setupAutoLiftMotor("VLL", DcMotor.Direction.FORWARD, hMap);
+        VLR = setupAutoLiftMotor("VLR", DcMotor.Direction.REVERSE, hMap);
 
     }
 
-    @Override
-    public void preUserInitLoopHook(@NonNull Wrapper opMode) {
-        Subsystem.super.preUserInitLoopHook(opMode);
-    }
-
-    @Override
-    public void preUserLoopHook(@NonNull Wrapper opMode) {
-        Subsystem.super.preUserLoopHook(opMode);
-    }
 
     @Override
     public void preUserStartHook(@NonNull Wrapper opMode) {
+        telemetry.addData("BTVeriticalSlidesSubsystem", "preUserStartHook");
         Subsystem.super.preUserStartHook(opMode);
     }
 
     @Override
     public void preUserStopHook(@NonNull Wrapper opMode) {
+        telemetry.addData("BTVeriticalSlidesSubsystem", "preUserStopHook");
         Subsystem.super.preUserStopHook(opMode);
     }
 
-    @NonNull
-    @Override
-    public Feature register() {
-        return Subsystem.super.register();
+    public static void setPower(double power){
+        telemetry.addData("BTVerticalSlidesSubsystem setPower: ", power);
+        VLL.setPower(power);
+        VLR.setPower(power);
     }
 
+    public static Lambda setPowerCommand(double power){
+        return new Lambda("set-power")
+                .setExecute(() -> {
+                    setPower(power);
+                });
+    }
+
+
+    public static Lambda runToPosition(int pos){
+        return new Lambda("set-target-pos")
+                .setInterruptible(true)
+                .setInit(() -> {
+                    VLL.setTargetPosition(pos);
+                    VLR.setTargetPosition(pos);
+                });
+    }
+
+    public static Lambda waitForPos(int pos) {
+        return new Lambda("wait-for-pos")
+                .setFinish(() -> Math.abs(getPos() - pos) < tolerance);
+    }
+
+    public static double getPos(){
+        return VLL.getCurrentPosition();
+    }
+
+    public void resetSlides() {
+            VLL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            VLL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            VLL.setTargetPosition(0);
+            VLL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            VLR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            VLR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            VLR.setTargetPosition(0);
+            VLR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+
+    private DcMotor setupAutoLiftMotor(String deviceName, DcMotor.Direction direction, HardwareMap hMap) {
+        DcMotor aMotor = hMap.get(DcMotor.class, deviceName);
+        aMotor.setDirection(direction);
+        aMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        aMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        aMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        aMotor.setTargetPosition(0);
+        aMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        return aMotor;
+    }
 
 }
