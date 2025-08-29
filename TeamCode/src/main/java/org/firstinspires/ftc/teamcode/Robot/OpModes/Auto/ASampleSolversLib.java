@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.Robot.Structure.Library.PoseStorage;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 
-@Autonomous(name = "Auto_SolversLib", group = "OpMode")
+@Autonomous(name = "AAAAuto_SolversLib", group = "OpMode")
 public class ASampleSolversLib extends OpMode {
     BTRobotV1 robot = new BTRobotV1(this);
     private Follower follower;
@@ -500,8 +500,8 @@ public class ASampleSolversLib extends OpMode {
     public void loop() {
 
         // These loop the movements of the robot
-        follower.update();
-        autonomousPathUpdate();
+//        follower.update();
+//        autonomousPathUpdate();
 
         // Feedback to Driver Hub
         telemetry.addData("path state", pathState);
@@ -538,8 +538,17 @@ public class ASampleSolversLib extends OpMode {
      * It runs all the setup actions, including building paths and starting the path system **/
     @Override
     public void start() {
-        opmodeTimer.resetTimer();
-        setPathState(0);
+ //       opmodeTimer.resetTimer();
+ //       setPathState(0);
+ //       vss = new VerticalSlidesSubsystem(hardwareMap);
+
+        SequentialCommandGroup commands_a = new SequentialCommandGroup(
+                new WaitCommand(2000),
+                new FollowPathCommand(follower, scorePreload, true),
+                new WaitCommand(1000)
+        );
+        commands_a.schedule();
+        commands_a.execute();
     }
 
     public void new_start() {
