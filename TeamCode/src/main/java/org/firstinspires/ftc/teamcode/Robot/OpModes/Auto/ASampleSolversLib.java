@@ -17,7 +17,9 @@ import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
-import org.firstinspires.ftc.teamcode.Robot.Structure.Hardware.BTRobotV1;
+
+
+import org.firstinspires.ftc.teamcode.Robot.Structure.Hardware.BTRobotV2;
 import org.firstinspires.ftc.teamcode.Robot.Structure.Hardware.Subsystem.VerticalSlidesSubsystem;
 import org.firstinspires.ftc.teamcode.Robot.Structure.Library.PoseStorage;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
@@ -25,7 +27,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 
 @Autonomous(name = "AAAAuto_SolversLib", group = "OpMode")
 public class ASampleSolversLib extends OpMode {
-    BTRobotV1 robot = new BTRobotV1(this);
+    BTRobotV2 robot = new BTRobotV2(this);
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
 
